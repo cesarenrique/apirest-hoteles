@@ -6,6 +6,11 @@ use App\Pais;
 use App\Provincia;
 use App\Localidad;
 use App\Hotel;
+use App\Pension;
+use App\TipoHabitacion;
+use App\Habitacion;
+use App\Temporada;
+use App\Alojamiento;
 use Faker\Generator;
 
 class DatabaseSeeder extends Seeder
@@ -25,9 +30,18 @@ class DatabaseSeeder extends Seeder
         Provincia::truncate();
         Localidad::truncate();
         Hotel::truncate();
+        Pension::truncate();
+        TipoHabitacion::truncate();
+        Habitacion::truncate();
+        Temporada::truncate();
+        Alojamiento::truncate();
 
         $cantidadUsuarios=20;
         $cantidadHoteles=100;
+        $cantidadPension=100;
+        $cantidadTipoHabitacion=100;
+        $cantidadHabitaciones=1000;
+
         User::flushEventListeners();
 
         DB::statement('SET FOREIGN_KEY_CHECKS= 1');
@@ -35,7 +49,14 @@ class DatabaseSeeder extends Seeder
         factory(User::class,$cantidadUsuarios)->create();
         DatabaseSeeder::rellenarLugares();
         factory(Hotel::class,$cantidadHoteles)->create();
-
+        DatabaseSeeder::rellenarIdHoteles();
+        factory(Pension::class,$cantidadPension)->create();
+        DatabaseSeeder::rellenarIdHoteles2();
+        factory(TipoHabitacion::class,$cantidadTipoHabitacion)->create();
+        factory(Habitacion::class,$cantidadHabitaciones)->create();
+        DatabaseSeeder::rellenarTemporada();
+        $faker= Faker\Factory::create();
+        DatabaseSeeder::rellenarAlojamiento($faker);
 
     }
 
@@ -150,5 +171,63 @@ class DatabaseSeeder extends Seeder
       DB::statement("INSERT INTO localidads (id, nombre, Provincia_id) VALUES(50, 'Zaragoza',50)");
       DB::statement("INSERT INTO localidads (id, nombre, Provincia_id) VALUES(51, 'Ceuta',51)");
       DB::statement("INSERT INTO localidads (id, nombre, Provincia_id) VALUES(52, 'Melilla',52)");
+    }
+
+    public function rellenarIdHoteles(){
+      $hoteles=Hotel::All();
+
+      foreach ($hoteles as $hotel) {
+
+        DB::statement(' Insert into pensions (tipo,Hotel_id) values ("'.Pension::SOLO_ALOJAMIENTO.'",'.$hotel->id.')');
+
+      }
+
+    }
+
+    public function rellenarIdHoteles2(){
+      $hoteles=Hotel::All();
+
+      foreach ($hoteles as $hotel) {
+
+        DB::statement(' Insert into tipo_habitacions (tipo,Hotel_id) values ("'.TipoHabitacion::HABITACION_NORMAL.'",'.$hotel->id.')');
+
+      }
+
+    }
+
+    public function rellenarTemporada(){
+
+      $hoteles=Hotel::All();
+
+      $fecha_ini1=DateTime::createFromFormat('Y-m-d',Temporada::INICIAL1);
+      $fecha_ini2=DateTime::createFromFormat('Y-m-d',Temporada::INICIAL2);
+      $fecha_ini3=DateTime::createFromFormat('Y-m-d',Temporada::INICIAL3);
+      $fecha_ini4=DateTime::createFromFormat('Y-m-d',Temporada::INICIAL4);
+      $fecha_fin1=date_modify(DateTime::createFromFormat('Y-m-d',Temporada::INICIAL2),'-1 day');
+      $fecha_fin2=date_modify(DateTime::createFromFormat('Y-m-d',Temporada::INICIAL3),'-1 day');
+      $fecha_fin3=date_modify(DateTime::createFromFormat('Y-m-d',Temporada::INICIAL4),'-1 day');
+      $fecha_fin4=DateTime::createFromFormat('Y-m-d',Temporada::FIN);
+      foreach ($hoteles as $hotel) {
+        DB::statement(' Insert into temporadas (tipo,fecha_desde,fecha_hasta,Hotel_id) values ("'.Temporada::TEMPORADA_BAJA.'","'.date_format($fecha_ini1,'Y-m-d').'","'.date_format($fecha_fin1,'Y-m-d').'",'.$hotel->id.')');
+        DB::statement(' Insert into temporadas (tipo,fecha_desde,fecha_hasta,Hotel_id) values ("'.Temporada::TEMPORADA_BAJA.'","'.date_format($fecha_ini2,'Y-m-d').'","'.date_format($fecha_fin2,'Y-m-d').'",'.$hotel->id.')');
+        DB::statement(' Insert into temporadas (tipo,fecha_desde,fecha_hasta,Hotel_id) values ("'.Temporada::TEMPORADA_ALTA.'","'.date_format($fecha_ini3,'Y-m-d').'","'.date_format($fecha_fin3,'Y-m-d').'",'.$hotel->id.')');
+        DB::statement(' Insert into temporadas (tipo,fecha_desde,fecha_hasta,Hotel_id) values ("'.Temporada::TEMPORADA_MEDIA.'","'.date_format($fecha_ini4,'Y-m-d').'","'.date_format($fecha_fin4,'Y-m-d').'",'.$hotel->id.')');
+      }
+    }
+
+    public function rellenarAlojamiento(Faker\Generator $faker){
+
+
+      $alojamientos=DB::select("select p.id 'Pension_id',th.id 'tipo_habitacion_id',t.id 'Temporada_id', p.Hotel_id
+          from pensions p, tipo_habitacions th, temporadas t
+            where p.Hotel_id =t.Hotel_id and th.Hotel_id=t.Hotel_id and p.Hotel_id =th.Hotel_id ");
+
+
+
+      foreach ($alojamientos as $alojamiento) {
+          $precio=strval($faker->randomFloat($nbMaxDecimals = 2, $min = 1, $max = 2000));
+          DB::statement(' Insert into alojamientos (Pension_id,tipo_habitacion_id,Temporada_id,precio) values ('.$alojamiento->Pension_id.','.$alojamiento->tipo_habitacion_id.','.$alojamiento->Temporada_id.','.$precio.')');
+
+       }
     }
 }

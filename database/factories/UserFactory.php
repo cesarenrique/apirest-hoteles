@@ -4,6 +4,9 @@
 
 use App\User;
 use App\Localidad;
+use App\Hotel;
+use App\Pension;
+use App\TipoHabitacion;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -49,4 +52,35 @@ $factory->define(App\Hotel::class, function (Faker $faker) {
       'NIF' => $values,
       'Localidad_id'=> $localidad->id,
     ];
+});
+$factory->define(App\Pension::class, function (Faker $faker) {
+    $hotel=Hotel::All()->random();
+    return [
+       'tipo'=> $faker->randomElement([Pension::PENSION_DESAYUNO,Pension::PENSION_COMPLETA,Pension::PENSION_COMPLETA_CENA]),
+       'Hotel_id'=>$hotel->id,
+    ];
+});
+
+$factory->define(App\TipoHabitacion::class, function (Faker $faker) {
+    $hotel=Hotel::All()->random();
+    return [
+       'tipo'=> $faker->randomElement([TipoHabitacion::HABITACION_SIMPLE,TipoHabitacion::HABITACION_DOBLE,TipoHabitacion::HABITACION_MATRIMONIAL]),
+       'Hotel_id'=>$hotel->id,
+    ];
+});
+
+$factory->define(App\Habitacion::class, function (Faker $faker) {
+    $hotel= Hotel::All()->random();
+    $tipo= $faker->randomElement(TipoHabitacion::where('Hotel_id',$hotel->id)->get());
+    $numero=0;
+    $numero=$faker->numberBetween($min=1,$max=400);
+    $ceros="";
+    if($numero<10) $ceros="00";
+    if(10<$numero && $numero<100) $ceros="0";
+    $numero2=$ceros.$numero;
+    return [
+       'numero'=> $numero2,
+       'Hotel_id'=> $hotel->id,
+       'tipo_habitacion_id'=> $tipo->id,
+     ];
 });
