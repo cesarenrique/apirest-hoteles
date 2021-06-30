@@ -11,6 +11,10 @@ use App\TipoHabitacion;
 use App\Habitacion;
 use App\Temporada;
 use App\Alojamiento;
+use App\Fecha;
+use App\Cliente;
+use App\Tarjeta;
+use App\Reserva;
 use Faker\Generator;
 
 class DatabaseSeeder extends Seeder
@@ -35,13 +39,19 @@ class DatabaseSeeder extends Seeder
         Habitacion::truncate();
         Temporada::truncate();
         Alojamiento::truncate();
+        Fecha::truncate();
+        Cliente::truncate();
+        Tarjeta::truncate();
+        Reserva::truncate();
 
         $cantidadUsuarios=20;
         $cantidadHoteles=100;
         $cantidadPension=100;
         $cantidadTipoHabitacion=100;
         $cantidadHabitaciones=1000;
-
+        $cantidadClientes=3000;
+        $cantidadTarjetas=5000;
+        $cantidadReservas=500;
         User::flushEventListeners();
 
         DB::statement('SET FOREIGN_KEY_CHECKS= 1');
@@ -57,7 +67,10 @@ class DatabaseSeeder extends Seeder
         DatabaseSeeder::rellenarTemporada();
         $faker= Faker\Factory::create();
         DatabaseSeeder::rellenarAlojamiento($faker);
-
+        DatabaseSeeder::rellenarFecha();
+        factory(Cliente::class,$cantidadClientes)->create();
+        factory(Tarjeta::class,$cantidadTarjetas)->create();
+        factory(Reserva::class,$cantidadReservas)->create();
     }
 
     public function rellenarLugares(){
@@ -229,5 +242,21 @@ class DatabaseSeeder extends Seeder
           DB::statement(' Insert into alojamientos (Pension_id,tipo_habitacion_id,Temporada_id,precio) values ('.$alojamiento->Pension_id.','.$alojamiento->tipo_habitacion_id.','.$alojamiento->Temporada_id.','.$precio.')');
 
        }
+    }
+
+    public function rellenarFecha(){
+      $hoteles=Hotel::All();
+      $start_date = Fecha::INICIAL;
+      $fecha = DateTime::createFromFormat('Y-m-d',$start_date);
+      for($i=0;$i<365;$i++){
+        foreach ($hoteles as $hotel) {
+
+          DB::statement(' Insert into fechas (abierto,Hotel_id) values ("'.date_format($fecha,'Y-m-d').'",'.$hotel->id.')');
+
+        }
+        $fecha->modify('+1 day');
+      }
+
+
     }
 }

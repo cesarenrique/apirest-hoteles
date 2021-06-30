@@ -7,6 +7,13 @@ use App\Localidad;
 use App\Hotel;
 use App\Pension;
 use App\TipoHabitacion;
+use App\Cliente;
+use App\Tarjeta;
+use App\Alojamiento;
+use App\Fecha;
+use App\Temporada;
+use App\Reserva;
+use App\Habitacion;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -83,4 +90,61 @@ $factory->define(App\Habitacion::class, function (Faker $faker) {
        'Hotel_id'=> $hotel->id,
        'tipo_habitacion_id'=> $tipo->id,
      ];
+});
+
+$factory->define(App\Cliente::class, function (Faker $faker) {
+  $values="";
+  for($i=0;$i<8;$i++){
+    $aux=$faker->randomDigit;
+    $values=$values .  strval($aux);
+  }
+  $numero=intval($values);
+  $resto=$numero%23;
+  $letra=array('T','R','W','A','G','M','Y','F','P','D','X','B',
+              'N','J','Z','S','Q','V','H','L','C','K','E');
+  $values=$values. $letra[$resto];
+
+  return [
+     'NIF'=> $values,
+     'nombre'=> $faker->name,
+     'email'=> $faker->unique()->email,
+     'telefono'=> $faker->phoneNumber,
+
+  ];
+});
+$factory->define(App\Tarjeta::class, function (Faker $faker) {
+    $cliente=Cliente::All()->random();
+
+    return [
+       'numero'=> $faker->creditCardNumber,
+       'Cliente_id'=> $cliente->id,
+
+    ];
+});
+
+$factory->define(App\Reserva::class, function (Faker $faker) {
+    $tarjeta=Tarjeta::All()->random();
+    $cliente=Cliente::find($tarjeta->Cliente_id);
+    $habitacion=Habitacion::All()->random();
+    $temporada=Temporada::where('Hotel_id',$habitacion->Hotel_id)->get()->random();
+    $fecha=Fecha::where('Hotel_id',$habitacion->Hotel_id)
+            ->whereBetween('abierto',[$temporada->fecha_desde,$temporada->fecha_hasta])
+            ->get()->random();
+    $pension=Pension::where('Hotel_id',$habitacion->Hotel_id)->get()->random();
+
+    $alojamiento=Alojamiento::where('Temporada_id',$temporada->id)
+      ->where('Pension_id',$pension->id)
+      ->where('tipo_habitacion_id',$habitacion->tipo_habitacion_id)
+      ->get()->random();
+    return [
+
+      'reservado'=> Reserva::RESERVADO,
+      'estado'=> Reserva::PAGADO_TOTALMENTE,
+      'pagado'=> $alojamiento->precio,
+      'Fecha_id'=> $fecha->id,
+      'Alojamiento_id'=> $alojamiento->id,
+      'Habitacion_id'=> $habitacion->id,
+      'Cliente_id'=>$cliente->id,
+
+    ];
 });

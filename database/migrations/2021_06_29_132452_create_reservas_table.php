@@ -16,7 +16,7 @@ class CreateReservasTable extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('reservado')->default(Reserva::LIBRE);
+            $table->string('reservado');
             $table->string('estado');
             $table->string('pagado');
             $table->bigInteger('Fecha_id')->unsigned();
