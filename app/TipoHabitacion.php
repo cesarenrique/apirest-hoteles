@@ -21,6 +21,6 @@ class TipoHabitacion extends Model
     protected $dates=['deleted_at'];
     protected $fillable = [
       'tipo',
-      'hotel_id',
+      'Hotel_id',
     ];
 }

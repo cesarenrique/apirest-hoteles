@@ -18,7 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });*/
 Route::resource('pais',PaisController::class,['only'=>['index','show']]);
 Route::resource('provincias',ProvinciaController::class,['only'=>['index','show']]);
-Route::resource('localidades',LocalidadController::class,['only'=>['index','show']]);
+Route::resource('localidads',LocalidadController::class,['only'=>['index','show']]);
 Route::resource('users',UserController::class,['except'=>['create','edit']]);
 Route::resource('hotels',HotelController::class,['except'=>['create','edit']]);
 Route::resource('pensions',PensionController::class,['except'=>['create','edit']]);
+Route::resource('tipo_habitacions',TipoHabitacionController::class,['except'=>['create','edit']]);
+Route::resource('hotels.pensions',HotelPensionController::class,['only'=>['index']]);
+Route::resource('pais.hotels',PaisHotelController::class,['only'=>['index']]);
+Route::resource('provincias.hotels',ProvinciaHotelController::class,['only'=>['index']]);
+Route::resource('localidads.hotels',LocalidadHotelController::class,['only'=>['index']]);
+Route::resource('hotels.tipo_habitacions',HotelTipoHabitacionController::class,['only'=>['index']]);
+Route::resource('habitacions',HabitacionController::class,['except'=>['create','edit']]);

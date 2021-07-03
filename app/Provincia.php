@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Pais;
+use App\Localidad;
 
 class Provincia extends Model
 {
@@ -17,6 +19,13 @@ class Provincia extends Model
    */
   protected $dates=['deleted_at'];
   protected $fillable = [
-      'nombre', 'Pais_id',
+      'id','nombre', 'Pais_id',
   ];
+  public function pais(){
+    return $this->belongsTo(Pais::class);
+  }
+
+  public function localidads(){
+    return $this->hasMany(Localidad::class);
+  }
 }

@@ -109,14 +109,12 @@ class UserController extends ApiController
         }
         if($request->has('tipo_usuario')){
             if(!$user->esVerificado()){
-              return $this->errorResponse('Unicamente los usuarios verificados
-              pueden cambiar su valor administrador',409);
+              return $this->errorResponse('Unicamente los usuarios verificados pueden cambiar su valor administrador',409);
             }
             $user->tipo_usuario=$request->tipo_usuario;
         }
         if(!$user->isDirty()){
-           return $this->errorResponse('Se debe especificar al menos un valo
-           r diferente para actualizar',409);
+           return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar',409);
         }
 
         $user->save();

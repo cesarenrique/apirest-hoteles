@@ -5,7 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Provincia;
+use App\Hotel;
 class Localidad extends Model
 {
   use Notifiable,SoftDeletes;
@@ -19,5 +20,14 @@ class Localidad extends Model
   protected $fillable = [
       'id',
       'nombre',
+      'Provincia_id',
   ];
+
+  public function provincia(){
+    return $this->belongsTo(Provincia::class);
+  }
+
+  public function hotels(){
+    return $this->hasMany(Hotel::class);
+  }
 }

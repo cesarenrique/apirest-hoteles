@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Provincia;
 
 class Pais extends Model
 {
@@ -20,4 +21,8 @@ class Pais extends Model
       'id',
       'nombre',
   ];
+
+  public function provincias(){
+    return $this->hasMany(Provincia::class);
+  }
 }
