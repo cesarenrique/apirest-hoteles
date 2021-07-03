@@ -35,3 +35,6 @@ Route::resource('temporadas',TemporadaController::class,['except'=>['create','ed
 Route::resource('alojamientos',AlojamientoController::class,['except'=>['create','edit','store']]);
 Route::get('hotels/{hotel}/alojamientos/generar','HotelAlojamientoController@generar');
 Route::resource('hotels.alojamientos',HotelAlojamientoController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::get('hotels/{hotel}/fechas/abrir','HotelFechaController@abrir');
+Route::get('hotels/{hotel}/fechas/cerrar','HotelFechaController@cerrar');
+Route::resource('hotels.fechas',HotelFechaController::class,['except'=>['create','edit','store','update','destroy']]);
