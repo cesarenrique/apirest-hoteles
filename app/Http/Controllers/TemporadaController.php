@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-use App\Hotel;
+use App\Temporada;
 
-class HotelController extends ApiController
+class TemporadaController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,8 @@ class HotelController extends ApiController
      */
     public function index()
     {
-        $hotels=Hotel::all();
-
-        return $this->showAll($hotels);
+        $temporadas=Temporada::all();
+        return $this->showAll($temporadas);
     }
 
     /**
@@ -39,14 +38,27 @@ class HotelController extends ApiController
     public function store(Request $request)
     {
         $rules=[
-          'NIF'=> 'required|min:8',
-          'nombre'=> 'required|min:2',
-          'Localidad_id' => 'required|exists:localidads,id',
+          'tipo'=> 'required',
+          'Hotel_id'=> 'required|exists:hotels,id',
+          'fecha_desde'=> 'required',
+          'fecha_hasta'=> 'required',
         ];
+
         $this->validate($request,$rules);
+        $fecha_desde=(string)$request->fecha_desde;
+        if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_desde))){
+           return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+        }
+
+        $fecha_hasta=(string)$request->fecha_hasta;
+        if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
+           return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+        }
+
         $campos=$request->all();
-        $hotel=Hotel::create($campos);
-        return $this->showOne($hotel,201);
+
+        $temporada=Temporada::create($campos);
+        return $this->showOne($temporada,201);
     }
 
     /**
@@ -57,8 +69,8 @@ class HotelController extends ApiController
      */
     public function show($id)
     {
-        $hotel=Hotel::findOrFail($id);
-        return $this->showOne($hotel);
+        $temporada=Temporada::findOrFail($id);
+        return $this->showOne($temporada);
     }
 
     /**
@@ -81,33 +93,7 @@ class HotelController extends ApiController
      */
     public function update(Request $request, $id)
     {
-      $hotel=Hotel::findOrFail($id);
-      $rules=[
-        'NIF'=> 'min:8',
-        'nombre'=> 'min:2',
-        'Localidad_id' => 'exists:localidads,id',
-      ];
-      $this->validate($request,$rules);
-
-      if($request->has('NIF')){
-          $hotel->NIF=$request->NIF;
-      }
-
-      if($request->has('nombre')){
-          $hotel->nombre=$request->nombre;
-      }
-
-      if($request->has('Localidad_id')){
-          $hotel->Localidad_id=$request->Localidad_id;
-      }
-
-      if(!$hotel->isDirty()){
-         return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar',409);
-      }
-
-      $hotel->save();
-      return $this->showOne($hotel);
-
+        //
     }
 
     /**
@@ -118,8 +104,8 @@ class HotelController extends ApiController
      */
     public function destroy($id)
     {
-        $hotel=Hotel::findOrFail($id);
-        $hotel->delete();
-        return $this->showOne($hotel);
+      $temporada=Temporada::findOrFail($id);
+      $temporada->delete();
+      return $this->showOne($temporada);
     }
 }

@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Habitacion;
+
 class TipoHabitacion extends Model
 {
     use SoftDeletes;
@@ -23,4 +25,8 @@ class TipoHabitacion extends Model
       'tipo',
       'Hotel_id',
     ];
+
+    public function habitacions(){
+      return $this->hasMany(Habitacion::class);
+    }
 }

@@ -29,3 +29,9 @@ Route::resource('provincias.hotels',ProvinciaHotelController::class,['only'=>['i
 Route::resource('localidads.hotels',LocalidadHotelController::class,['only'=>['index']]);
 Route::resource('hotels.tipo_habitacions',HotelTipoHabitacionController::class,['only'=>['index']]);
 Route::resource('habitacions',HabitacionController::class,['except'=>['create','edit']]);
+Route::resource('hotels.habitacions',HotelHabitacionController::class,['only'=>['index']]);
+Route::resource('tipo_habitacions.habitacions',TipoHabitacionHabitacionController::class,['only'=>['index']]);
+Route::resource('temporadas',TemporadaController::class,['except'=>['create','edit','update']]);
+Route::resource('alojamientos',AlojamientoController::class,['except'=>['create','edit','store']]);
+Route::get('hotels/{hotel}/alojamientos/generar','HotelAlojamientoController@generar');
+Route::resource('hotels.alojamientos',HotelAlojamientoController::class,['except'=>['create','edit','store','update','destroy']]);

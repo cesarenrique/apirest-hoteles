@@ -4,20 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-use App\Hotel;
-
-class HotelController extends ApiController
+use App\TipoHabitacion;
+class TipoHabitacionHabitacionController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($tipohab_id)
     {
-        $hotels=Hotel::all();
-
-        return $this->showAll($hotels);
+        $tipohab=TipoHabitacion::findOrFail($tipohab_id);
+        $habitaciones=$tipohab->habitacions;
+        return $this->showAll($habitaciones);
     }
 
     /**
@@ -38,15 +37,7 @@ class HotelController extends ApiController
      */
     public function store(Request $request)
     {
-        $rules=[
-          'NIF'=> 'required|min:8',
-          'nombre'=> 'required|min:2',
-          'Localidad_id' => 'required|exists:localidads,id',
-        ];
-        $this->validate($request,$rules);
-        $campos=$request->all();
-        $hotel=Hotel::create($campos);
-        return $this->showOne($hotel,201);
+        //
     }
 
     /**
@@ -57,8 +48,7 @@ class HotelController extends ApiController
      */
     public function show($id)
     {
-        $hotel=Hotel::findOrFail($id);
-        return $this->showOne($hotel);
+        //
     }
 
     /**
@@ -81,33 +71,7 @@ class HotelController extends ApiController
      */
     public function update(Request $request, $id)
     {
-      $hotel=Hotel::findOrFail($id);
-      $rules=[
-        'NIF'=> 'min:8',
-        'nombre'=> 'min:2',
-        'Localidad_id' => 'exists:localidads,id',
-      ];
-      $this->validate($request,$rules);
-
-      if($request->has('NIF')){
-          $hotel->NIF=$request->NIF;
-      }
-
-      if($request->has('nombre')){
-          $hotel->nombre=$request->nombre;
-      }
-
-      if($request->has('Localidad_id')){
-          $hotel->Localidad_id=$request->Localidad_id;
-      }
-
-      if(!$hotel->isDirty()){
-         return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar',409);
-      }
-
-      $hotel->save();
-      return $this->showOne($hotel);
-
+        //
     }
 
     /**
@@ -118,8 +82,6 @@ class HotelController extends ApiController
      */
     public function destroy($id)
     {
-        $hotel=Hotel::findOrFail($id);
-        $hotel->delete();
-        return $this->showOne($hotel);
+        //
     }
 }

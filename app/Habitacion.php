@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Alojamiento;
+
 class Habitacion extends Model
 {
     use SoftDeletes;
@@ -16,5 +18,7 @@ class Habitacion extends Model
         'tipo_habitacion_id',
 
     ];
+
+
 
 }

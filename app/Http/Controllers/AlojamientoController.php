@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-use App\Hotel;
+use App\Alojamiento;
 
-class HotelController extends ApiController
+class AlojamientoController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,8 @@ class HotelController extends ApiController
      */
     public function index()
     {
-        $hotels=Hotel::all();
-
-        return $this->showAll($hotels);
+        $alojamientos=Alojamiento::all();
+        return $this->showAll($alojamientos);
     }
 
     /**
@@ -38,15 +37,7 @@ class HotelController extends ApiController
      */
     public function store(Request $request)
     {
-        $rules=[
-          'NIF'=> 'required|min:8',
-          'nombre'=> 'required|min:2',
-          'Localidad_id' => 'required|exists:localidads,id',
-        ];
-        $this->validate($request,$rules);
-        $campos=$request->all();
-        $hotel=Hotel::create($campos);
-        return $this->showOne($hotel,201);
+        //
     }
 
     /**
@@ -57,8 +48,8 @@ class HotelController extends ApiController
      */
     public function show($id)
     {
-        $hotel=Hotel::findOrFail($id);
-        return $this->showOne($hotel);
+        $alojamiento=Alojamiento::findOrFail($id);
+        return $this->showOne($alojamiento);
     }
 
     /**
@@ -81,33 +72,27 @@ class HotelController extends ApiController
      */
     public function update(Request $request, $id)
     {
-      $hotel=Hotel::findOrFail($id);
+      $alojamiento=Hotel::findOrFail($id);
       $rules=[
-        'NIF'=> 'min:8',
-        'nombre'=> 'min:2',
-        'Localidad_id' => 'exists:localidads,id',
+        'precio'=> 'required',
       ];
+
       $this->validate($request,$rules);
 
-      if($request->has('NIF')){
-          $hotel->NIF=$request->NIF;
+      if($request->has('precio')){
+          if(!(preg_match_all('/^[0-9]+([,][0-9]+)?$/',$request->precio))){
+             return $this->errorResponse("el precio tiene que ser formato float",401);
+          }
+          $alojamiento->precio=$request->precio;
       }
 
-      if($request->has('nombre')){
-          $hotel->nombre=$request->nombre;
-      }
 
-      if($request->has('Localidad_id')){
-          $hotel->Localidad_id=$request->Localidad_id;
-      }
-
-      if(!$hotel->isDirty()){
+      if(!$alojamiento->isDirty()){
          return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar',409);
       }
 
-      $hotel->save();
-      return $this->showOne($hotel);
-
+      $alojamiento->save();
+      return $this->showOne($alojamiento);
     }
 
     /**
@@ -118,8 +103,8 @@ class HotelController extends ApiController
      */
     public function destroy($id)
     {
-        $hotel=Hotel::findOrFail($id);
-        $hotel->delete();
-        return $this->showOne($hotel);
+      $alojamiento=Alojamiento::findOrFail($id);
+      $alojamiento->delete();
+      return $this->showOne($alojamiento);
     }
 }

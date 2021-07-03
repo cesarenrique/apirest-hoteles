@@ -22,4 +22,8 @@ class Hotel extends Model
     public function tipo_habitacions(){
         return $this->hasMany(TipoHabitacion::class);
     }
+
+    public function habitacions(){
+        return $this->hasMany(Habitacion::class);
+    }
 }
