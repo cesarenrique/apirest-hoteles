@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
-use App\Pais;
+use App\Hotel;
 
-class PaisController extends ApiController
+class HotelController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class PaisController extends ApiController
      */
     public function index()
     {
-        $paises=Pais::all();
+        $hotels=Hotel::all();
 
-        return $this->showAll($paises);
+        return $this->showAll($hotels);
     }
 
     /**
@@ -38,7 +38,15 @@ class PaisController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules=[
+          'NIF'=> 'required|min:8',
+          'nombre'=> 'required|min:2',
+          'Localidad_id' => 'required|exists:localidads,id',
+        ];
+        $this->validate($request,$rules);
+        $campos=$request->all();
+        $hotel=Hotel::create($campos);
+        return $this->showOne($hotel,201);
     }
 
     /**
@@ -49,9 +57,8 @@ class PaisController extends ApiController
      */
     public function show($id)
     {
-      $pais=Pais::findOrFail($id);
-
-      return $this->showOne($pais);
+        $hotel=Hotel::findOrFail($id);
+        return $this->showOne($hotel);
     }
 
     /**
@@ -74,7 +81,34 @@ class PaisController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+      $hotel=Hotel::findOrFail($id);
+      $rules=[
+        'NIF'=> 'min:8',
+        'nombre'=> 'min:2',
+        'Localidad_id' => 'exists:localidads,id',
+      ];
+      $this->validate($request,$rules);
+
+      if($request->has('NIF')){
+          $hotel->NIF=$request->NIF;
+      }
+
+      if($request->has('nombre')){
+          $hotel->nombre=$request->nombre;
+      }
+
+      if($request->has('Localidad_id')){
+          $hotel->Localidad_id=$request->Localidad_id;
+      }
+
+      if(!$hotel->isDirty()){
+         return $this->errorResponse('Se debe especificar al menos un valo
+         r diferente para actualizar',409);
+      }
+
+      $hotel->save();
+      return $this->showOne($hotel);
+
     }
 
     /**
@@ -85,6 +119,8 @@ class PaisController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $hotel=Hotel::findOrFail($id);
+        $hotel->delete();
+        return $this->showOne($hotel);
     }
 }

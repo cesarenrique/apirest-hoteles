@@ -24,6 +24,7 @@ class CreateAlojamientosTable extends Migration
             $table->foreign('tipo_habitacion_id')->references('id')->on('tipo_habitacions');
             $table->foreign('Temporada_id')->references('id')->on('temporadas');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

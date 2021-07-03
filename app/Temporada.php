@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Temporada extends Model
 {
+
+  use SoftDeletes;
   //Basicas
   const TEMPORADA_BAJA="baja";
   const TEMPORADA_MEDIA="media";
@@ -20,6 +23,7 @@ class Temporada extends Model
   *
   * @var array
   */
+  protected $dates=['deleted_at'];
   protected $fillable = [
     'tipo',
     'fecha_desde',

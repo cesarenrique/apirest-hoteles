@@ -21,6 +21,7 @@ class CreateTemporadasTable extends Migration
             $table->bigInteger('Hotel_id')->unsigned();
             $table->foreign('Hotel_id')->references('id')->on('hotels');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

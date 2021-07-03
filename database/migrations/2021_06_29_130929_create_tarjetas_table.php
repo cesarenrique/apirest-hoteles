@@ -19,6 +19,7 @@ class CreateTarjetasTable extends Migration
             $table->bigInteger('Cliente_id')->unsigned();
             $table->foreign('Cliente_id')->references('id')->on('clientes');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

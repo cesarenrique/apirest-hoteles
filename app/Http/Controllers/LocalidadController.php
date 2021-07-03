@@ -47,7 +47,9 @@ class LocalidadController extends ApiController
      */
     public function show($id)
     {
-        //
+      $localidad=Localidad::findOrFail($id);
+
+      return $this->showOne($localidad);
     }
 
     /**

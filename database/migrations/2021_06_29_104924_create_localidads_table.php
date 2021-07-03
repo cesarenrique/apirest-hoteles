@@ -19,6 +19,7 @@ class CreateLocalidadsTable extends Migration
             $table->bigInteger('Provincia_id')->unsigned();
             $table->foreign('Provincia_id')->references('id')->on('Provincias')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -48,7 +48,9 @@ class ProvinciaController extends ApiController
      */
     public function show($id)
     {
-        //
+      $provincia=Provincia::findOrFail($id);
+
+      return $this->showOne($provincia);
     }
 
     /**

@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
-Route::resource('pais',PaisController::class,['only'=>['index']]);
-Route::resource('provincias',ProvinciaController::class,['only'=>['index']]);
-Route::resource('localidades',LocalidadController::class,['only'=>['index']]);
+Route::resource('pais',PaisController::class,['only'=>['index','show']]);
+Route::resource('provincias',ProvinciaController::class,['only'=>['index','show']]);
+Route::resource('localidades',LocalidadController::class,['only'=>['index','show']]);
+Route::resource('users',UserController::class,['except'=>['create','edit']]);
+Route::resource('hotels',HotelController::class,['except'=>['create','edit']]);
+Route::resource('pensions',PensionController::class,['except'=>['create','edit']]);

@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pension extends Model
 {
+    use SoftDeletes;
     //
     const SOLO_ALOJAMIENTO="solo alojamiento";
     const PENSION_DESAYUNO="solo desayuno";
@@ -16,9 +18,10 @@ class Pension extends Model
      *
      * @var array
      */
+    protected $dates=['deleted_at'];
     protected $fillable = [
         'tipo',
-
+        'Hotel_id',
     ];
 
 }

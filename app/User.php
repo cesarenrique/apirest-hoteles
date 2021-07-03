@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable,SoftDeletes;
 
 
     const USUARIO_VERIFICADO='1';
@@ -25,6 +26,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $dates=['deleted_at'];
     protected $fillable = [
         'name', 'email', 'password', 'verified', 'verification_token', 'tipo_usuario',
     ];
