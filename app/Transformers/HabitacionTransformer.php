@@ -39,6 +39,25 @@ class HabitacionTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$habitacion->created_at,
           'fechaActualizacion'=>(string)$habitacion->updated_at,
           'fechaEliminacion'=>isset($habitacion->deleted_at) ?(string)$habitacion->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('habitacions.show',$habitacion->id),
+              ],
+
+              [
+                  'rel'=>'habitacions.alojamientos',
+                  'href'=> route('habitacions.alojamientos.index',$habitacion->id),
+              ],
+              [
+                  'rel'=>'habitacions.fechas',
+                  'href'=> route('habitacions.fechas.index',$habitacion->id),
+              ],
+              [
+                  'rel'=>'habitacions.reservas',
+                  'href'=> route('habitacions.reservas.index',$habitacion->id),
+              ],
+            ],
         ];
     }
 }

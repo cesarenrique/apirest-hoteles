@@ -38,7 +38,16 @@ class LocalidadTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$localidad->created_at,
           'fechaActualizacion'=>(string)$localidad->updated_at,
           'fechaEliminacion'=>isset($localidad->deleted_at) ?(string)$localidad->deteted_at: null,
-
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('localidads.show',$localidad->id),
+              ],
+              [
+                  'rel'=>'pais.hotels',
+                  'href'=> route('localidads.hotels.index',$localidad->id),
+              ],
+            ],
         ];
     }
 }

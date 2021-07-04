@@ -39,6 +39,16 @@ class ProvinciaTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$provincia->created_at,
           'fechaActualizacion'=>(string)$provincia->updated_at,
           'fechaEliminacion'=>isset($provincia->deleted_at) ?(string)$provincia->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('provincias.show',$provincia->id),
+              ],
+              [
+                  'rel'=>'pais.hotels',
+                  'href'=> route('provincias.hotels.index',$provincia->id),
+              ],
+          ],
         ];
     }
 }

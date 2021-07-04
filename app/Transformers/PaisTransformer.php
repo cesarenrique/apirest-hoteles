@@ -38,6 +38,16 @@ class PaisTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$pais->created_at,
           'fechaActualizacion'=>(string)$pais->updated_at,
           'fechaEliminacion'=>isset($pais->deleted_at) ?(string)$pais->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('pais.show',$pais->id),
+              ],
+              [
+                  'rel'=>'pais.hotels',
+                  'href'=> route('pais.hotels.index',$pais->id),
+              ],
+          ],
         ];
     }
 }

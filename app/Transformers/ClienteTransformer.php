@@ -42,6 +42,20 @@ class ClienteTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$cliente->created_at,
           'fechaActualizacion'=>(string)$cliente->updated_at,
           'fechaEliminacion'=>isset($cliente->deleted_at) ?(string)$cliente->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('clientes.show',$cliente->id),
+              ],
+              [
+                  'rel'=>'clientes.reservas',
+                  'href'=> route('clientes.reservas.index',$cliente->id),
+              ],
+              [
+                  'rel'=>'clientes.tarjetas',
+                  'href'=> route('clientes.tarjetas.index',$cliente->id),
+              ],
+            ],
         ];
     }
 }

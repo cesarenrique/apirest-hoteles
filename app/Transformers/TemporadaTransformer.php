@@ -41,7 +41,12 @@ class TemporadaTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$temporada->created_at,
           'fechaActualizacion'=>(string)$temporada->updated_at,
           'fechaEliminacion'=>isset($temporada->deleted_at) ?(string)$temporada->deteted_at: null,
-
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('temporadas.show',$temporada->id),
+              ],
+            ],
         ];
     }
 }

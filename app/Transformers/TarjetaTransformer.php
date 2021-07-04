@@ -38,6 +38,12 @@ class TarjetaTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$tarjeta->created_at,
           'fechaActualizacion'=>(string)$tarjeta->updated_at,
           'fechaEliminacion'=>isset($tarjeta->deleted_at) ?(string)$tarjeta->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('tarjetas.show',$tarjeta->id),
+              ],
+            ],
         ];
     }
 }

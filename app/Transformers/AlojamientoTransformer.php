@@ -41,6 +41,12 @@ class AlojamientoTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$alojamiento->created_at,
           'fechaActualizacion'=>(string)$alojamiento->updated_at,
           'fechaEliminacion'=>isset($alojamiento->deleted_at) ?(string)$alojamiento->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('alojamientos.show',$alojamiento->id),
+              ],
+            ],
         ];
     }
 }

@@ -39,7 +39,17 @@ class TipoHabitacionTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$tipohab->created_at,
           'fechaActualizacion'=>(string)$tipohab->updated_at,
           'fechaEliminacion'=>isset($tipohab->deleted_at) ?(string)$tipohab->deteted_at: null,
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('tipo_habitacions.show',$tipohab->id),
+              ],
 
+              [
+                  'rel'=>'tipo_habitacions.habitacions',
+                  'href'=> route('tipo_habitacions.habitacions.index',$tipohab->id),
+              ],
+            ],
         ];
     }
 }

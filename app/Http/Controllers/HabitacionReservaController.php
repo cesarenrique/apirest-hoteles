@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-class HabitacionReservaController extends Controller
+use App\Http\Controllers\ApiController;
+use App\Habitacion;
+class HabitacionReservaController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Habitacion $habitacion)
     {
-        //
+        $reservas=$habitacion->reservas;
+        return $this->showAll($reservas);
     }
 
     /**

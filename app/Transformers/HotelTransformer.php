@@ -40,7 +40,44 @@ class HotelTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$hotel->created_at,
           'fechaActualizacion'=>(string)$hotel->updated_at,
           'fechaEliminacion'=>isset($hotel->deleted_at) ?(string)$hotel->deteted_at: null,
-
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('hotels.show',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.alojamientos',
+                  'href'=> route('hotels.alojamientos.index',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.fechas',
+                  'href'=> route('hotels.fechas.index',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.habitacions',
+                  'href'=> route('hotels.habitacions.index',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.pensions',
+                  'href'=> route('hotels.pensions.index',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.reservas',
+                  'href'=> route('hotels.reservas.index',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.tipo_habitacions',
+                  'href'=> route('hotels.tipo_habitacions.index',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.alojamientos.generar',
+                  'href'=> route('hotels.alojamientos.generar',$hotel->id),
+              ],
+              [
+                  'rel'=>'hotels.alojamientos.generar',
+                  'href'=> route('hotels.alojamientos.generar',$hotel->id),
+              ],
+          ],
         ];
     }
 }

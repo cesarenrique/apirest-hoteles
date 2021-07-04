@@ -39,6 +39,7 @@ class FechaTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$fecha->created_at,
           'fechaActualizacion'=>(string)$fecha->updated_at,
           'fechaEliminacion'=>isset($fecha->deleted_at) ?(string)$fecha->deteted_at: null,
+          
         ];
     }
 }

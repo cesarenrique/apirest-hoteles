@@ -38,7 +38,12 @@ class PensionTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$pension->created_at,
           'fechaActualizacion'=>(string)$pension->updated_at,
           'fechaEliminacion'=>isset($pension->deleted_at) ?(string)$pension->deteted_at: null,
-
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('pensions.show',$pension->id),
+              ],
+            ],
         ];
     }
 }

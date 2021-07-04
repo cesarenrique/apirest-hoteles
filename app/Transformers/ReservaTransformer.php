@@ -43,7 +43,12 @@ class ReservaTransformer extends TransformerAbstract
           'fechaCreacion'=>(string)$reserva->created_at,
           'fechaActualizacion'=>(string)$reserva->updated_at,
           'fechaEliminacion'=>isset($reserva->deleted_at) ?(string)$reserva->deteted_at: null,
-
+          'links'=>[
+              [
+                  'rel'=>'self',
+                  'href'=> route('reservas.show',$reserva->id),
+              ],
+            ],
         ];
     }
 }
