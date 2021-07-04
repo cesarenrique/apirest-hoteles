@@ -5,7 +5,7 @@ namespace App\Http\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
-
+use League\Fractal\TransformerAbstract;
 trait ApiResponse{
 
   private function successResponse($data,$code){
@@ -17,10 +17,22 @@ trait ApiResponse{
   }
 
   protected function showAll(Collection $collection, $code=200){
+    if($collection->isEmpty()){
+      return $this->successResponse(['data'=>$collection]);
+    }
+    $transformer = $collection->first()->transformer;
+    $collection = $this->transformData($collection,$transformer);
     return $this->successResponse(['data'=>$collection], $code);
   }
 
   protected function showOne(Model $instance,$code=200){
+    $transformer = $instance->transformer;
+    $instance = $this->transformData($instance,$transformer);
     return $this->successResponse(['data'=>$instance], $code);
+  }
+
+  protected function transformData( $data, $transformer){
+    $transformation= fractal($data,new $transformer);
+    return $transformation->toArray();
   }
 }

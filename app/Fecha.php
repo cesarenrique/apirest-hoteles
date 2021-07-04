@@ -4,11 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\FechaTransformer;
 
 class Fecha extends Model
 {
   use SoftDeletes;
   const INICIAL='2021-01-01';
+
+  public $transformer= FechaTransformer::class;
   /**
   * The attributes that are mass assignable.
   *

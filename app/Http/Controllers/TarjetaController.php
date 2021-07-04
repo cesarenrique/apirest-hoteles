@@ -15,7 +15,7 @@ class TarjetaController extends ApiController
      */
     public function index()
     {
-        $tarjetas::Tarjetas::all();
+        $tarjetas=Tarjeta::all();
         return $this->showAll($tarjetas);
     }
 

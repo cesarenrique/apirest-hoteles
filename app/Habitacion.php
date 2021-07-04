@@ -5,10 +5,15 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Alojamiento;
+use App\Transformers\HabitacionTransformer;
 
 class Habitacion extends Model
 {
     use SoftDeletes;
+
+
+    public $transformer= HabitacionTransformer::class;
+
     protected $dates=['deleted_at'];
 
     protected $fillable = [

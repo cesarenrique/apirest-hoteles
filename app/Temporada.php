@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Transformers\TemporadaTransformer;
 class Temporada extends Model
 {
 
@@ -18,6 +18,8 @@ class Temporada extends Model
   const INICIAL3='2021-06-01';
   const INICIAL4='2021-09-01';
   const FIN='2021-12-31';
+
+  public $transformer= TemporadaTransformer::class;
   /**
   * The attributes that are mass assignable.
   *

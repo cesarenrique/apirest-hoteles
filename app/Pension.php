@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\PensionTransformer;
 
 class Pension extends Model
 {
@@ -13,6 +14,8 @@ class Pension extends Model
     const PENSION_DESAYUNO="solo desayuno";
     const PENSION_COMPLETA="desayuno y comida";
     const PENSION_COMPLETA_CENA="desayuno, comida y cena";
+
+    public $transformer= PensionTransformer::class;
     /**
      * The attributes that are mass assignable.
      *

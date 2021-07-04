@@ -7,10 +7,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Provincia;
 use App\Hotel;
+use App\Transformers\LocalidadTransformer;
+
 class Localidad extends Model
 {
   use Notifiable,SoftDeletes;
 
+  public $transformer= LocalidadTransformer::class;
   /**
    * The attributes that are mass assignable.
    *

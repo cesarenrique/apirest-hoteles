@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\UserTransformer;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,8 @@ class User extends Authenticatable
     const USUARIO_ADMINISTRADOR='1';
     const USUARIO_EDITOR='2';
     const USUARIO_CLIENTE='3';
+
+    public $transformer= UserTransformer::class;
 
     /**
      * The attributes that are mass assignable.

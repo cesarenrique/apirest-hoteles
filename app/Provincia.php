@@ -7,11 +7,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Pais;
 use App\Localidad;
+use App\Transformers\ProvinciaTransformer;
 
 class Provincia extends Model
 {
   use Notifiable,SoftDeletes;
 
+  public $transformer= ProvinciaTransformer::class;
   /**
    * The attributes that are mass assignable.
    *

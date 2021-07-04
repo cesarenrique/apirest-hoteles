@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Habitacion;
+use App\Transformers\TipoHabitacionTransformer;
 
 class TipoHabitacion extends Model
 {
@@ -15,6 +16,7 @@ class TipoHabitacion extends Model
     const HABITACION_SIMPLE="simple";
     const HABITACION_DOBLE="doble";
     const HABITACION_MATRIMONIAL="matrimonial";
+    public $transformer= TipoHabitacionTransformer::class;
     /**
     * The attributes that are mass assignable.
     *

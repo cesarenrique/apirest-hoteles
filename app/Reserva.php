@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\ReservaTransformer;
 
 class Reserva extends Model
 {
@@ -16,6 +17,7 @@ class Reserva extends Model
     const PAGADO_TOTALMENTE="totalmente pagado";
     const PAGADO_PARCIALMENTE="parcialmente pagado";
 
+    public $transformer= ReservaTransformer::class;
     protected $dates=['deleted_at'];
     protected $fillable = [
         'id',
