@@ -49,3 +49,4 @@ Route::get('habitacions/{habitacion}/fechas/ocupado','HabitacionFechasController
 Route::resource('habitacions.fechas',HabitacionFechasController::class,['except'=>['create','edit','store','update','destroy']]);
 Route::resource('habitacions.reservas',HabitacionReservaController::class,['except'=>['create','edit','store','update','destroy']]);
 Route::resource('habitacions.alojamientos',HabitacionAlojamientoController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::resource('oauth/token','Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
