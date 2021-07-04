@@ -19,6 +19,8 @@ class Habitacion extends Model
 
     ];
 
-
+    public function reservas(){
+        return $this->hasMany(Reserva::class);
+    }
 
 }

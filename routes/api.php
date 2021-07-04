@@ -38,3 +38,13 @@ Route::resource('hotels.alojamientos',HotelAlojamientoController::class,['except
 Route::get('hotels/{hotel}/fechas/abrir','HotelFechaController@abrir');
 Route::get('hotels/{hotel}/fechas/cerrar','HotelFechaController@cerrar');
 Route::resource('hotels.fechas',HotelFechaController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::resource('clientes',ClienteController::class,['except'=>['create','edit']]);
+Route::resource('tarjetas',TarjetaController::class,['except'=>['create','edit']]);
+Route::resource('clientes.tarjetas',ClienteTarjetaController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::resource('reservas',ReservaController::class,['except'=>['create','edit']]);
+Route::resource('clientes.reservas',ClienteReservaController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::resource('hotels.reservas',HotelReservaController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::get('habitacions/{hotel}/fechas/libre','HabitacionFechasController@libre');
+Route::get('habitacions/{hotel}/fechas/ocupado','HabitacionFechasController@ocupado');
+Route::resource('habitacions.fechas',HabitacionFechasController::class,['except'=>['create','edit','store','update','destroy']]);
+Route::resource('habitacions.alojamientos',HabitacionAlojamientoController::class,['except'=>['create','edit','store','update','destroy']]);

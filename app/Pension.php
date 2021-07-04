@@ -23,8 +23,10 @@ class Pension extends Model
         'tipo',
         'Hotel_id',
     ];
-    
+
     public function alojamientos(){
         return $this->hasMany(Alojamiento::class);
     }
+
+
 }

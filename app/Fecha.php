@@ -19,4 +19,8 @@ class Fecha extends Model
     'abierto',
   ];
 
+  public function fechas(){
+      return $this->hasMany(Reserva::class);
+  }
+
 }

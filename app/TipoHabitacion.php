@@ -29,4 +29,8 @@ class TipoHabitacion extends Model
     public function habitacions(){
       return $this->hasMany(Habitacion::class);
     }
+
+    public function alojamientos(){
+      return $this->hasMany(Alojamiento::class);
+    }
 }
