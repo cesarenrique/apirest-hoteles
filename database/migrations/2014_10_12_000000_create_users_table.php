@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('verification_token')->nullable();
             $table->string('tipo_usuario')->default(User::USUARIO_CLIENTE);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -19,8 +19,9 @@ class CreateTemporadasTable extends Migration
             $table->date('fecha_desde');
             $table->date('fecha_hasta');
             $table->bigInteger('Hotel_id')->unsigned();
-            $table->foreign('Hotel_id')->references('id')->on('hotels');
+            $table->foreign('Hotel_id')->references('id')->on('hotels')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
