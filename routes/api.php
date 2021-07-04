@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('pais',PaisController::class,['only'=>['index','show']]);
 Route::resource('provincias',ProvinciaController::class,['only'=>['index','show']]);
 Route::resource('localidads',LocalidadController::class,['only'=>['index','show']]);
+Route::post('user/login','api\LoginController@login');
+Route::post('user/signUp','api\LoginController@signUp');
 Route::resource('users',UserController::class,['except'=>['create','edit']]);
 Route::resource('hotels',HotelController::class,['except'=>['create','edit']]);
 Route::resource('pensions',PensionController::class,['except'=>['create','edit']]);
@@ -49,4 +51,4 @@ Route::get('habitacions/{habitacion}/fechas/ocupado','HabitacionFechasController
 Route::resource('habitacions.fechas',HabitacionFechasController::class,['except'=>['create','edit','store','update','destroy']]);
 Route::resource('habitacions.reservas',HabitacionReservaController::class,['except'=>['create','edit','store','update','destroy']]);
 Route::resource('habitacions.alojamientos',HabitacionAlojamientoController::class,['except'=>['create','edit','store','update','destroy']]);
-Route::resource('oauth/token','Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+Route::post('oauth/token','\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken')->name('passport.token');

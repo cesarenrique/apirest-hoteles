@@ -12,7 +12,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable,HasApiTokens,SoftDeletes;
+    use Notifiable, HasApiTokens, SoftDeletes;
 
 
     const USUARIO_VERIFICADO='1';
