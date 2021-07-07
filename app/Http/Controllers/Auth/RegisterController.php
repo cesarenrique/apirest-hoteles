@@ -64,10 +64,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        /*
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        */
+        $campos=$data;
+        $campos['password']= bcrypt($data['password']);
+        $campos['verified'] = User::USUARIO_NO_VERIFICADO;
+        $campos['verification_token']= User::generateVerificationToken();
+        $campos['tipo_usuario']= User::USUARIO_CLIENTE;
+        return User::create($campos);
     }
 }

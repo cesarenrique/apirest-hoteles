@@ -8,14 +8,19 @@ use App\Provincia;
 
 class ProvinciaHotelController extends ApiController
 {
-    /**
+
+    public function __construct(){
+      $this->middleware('client.credentials');
+
+    }
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index($Provincia_id)
     {
-      
+
       $provincia=Provincia::findOrFail($Provincia_id);
       $localidades=$provincia->localidads;
       $hotelesprevio=collect();

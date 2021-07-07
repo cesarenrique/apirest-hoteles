@@ -7,7 +7,12 @@ use App\Localidad;
 
 class LocalidadController extends ApiController
 {
-    /**
+
+  public function __construct(){
+    $this->middleware('client.credentials');
+
+  }
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
