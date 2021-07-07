@@ -19,8 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('pais',PaisController::class,['only'=>['index','show']]);
 Route::resource('provincias',ProvinciaController::class,['only'=>['index','show']]);
 Route::resource('localidads',LocalidadController::class,['only'=>['index','show']]);
-Route::post('user/login','api\LoginController@login');
-Route::post('user/signUp','api\LoginController@signUp');
 Route::resource('users',UserController::class,['except'=>['create','edit']]);
 Route::resource('hotels',HotelController::class,['except'=>['create','edit']]);
 Route::resource('pensions',PensionController::class,['except'=>['create','edit']]);

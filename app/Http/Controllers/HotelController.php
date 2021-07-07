@@ -10,7 +10,6 @@ class HotelController extends ApiController
 {
 
   public function __construct(){
-    parent::
     $this->middleware('client.credentials');
 
   }

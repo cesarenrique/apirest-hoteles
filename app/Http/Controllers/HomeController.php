@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(Auth::check()){
+            $user_id=Auth::id();
+            $user=User::findOrFail($user_id);
+            if($user->esVerificado()){
+              return view('home');
+            }else{
+              return view('home.verification');
+            }
+        }
         return view('home');
     }
     /**
@@ -32,6 +43,16 @@ class HomeController extends Controller
      */
     public function getTokens()
     {
-        return view('home.personal-tokens');
+        if(Auth::check()){
+            $user_id=Auth::id();
+            $user=User::findOrFail($user_id);
+            if($user->esVerificado()){
+
+              return view('home.personal-tokens');
+            }else{
+              return view('home.verification');
+            }
+        }
+        return view('home');
     }
 }
