@@ -7,6 +7,11 @@ use App\Http\Controllers\ApiController;
 use App\Cliente;
 class ClienteReservaController extends ApiController
 {
+
+    public function __construct(){
+      $this->middleware('client.credentials');
+
+    }
     /**
      * Display a listing of the resource.
      *

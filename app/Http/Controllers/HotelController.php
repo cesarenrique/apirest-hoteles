@@ -8,7 +8,13 @@ use App\Hotel;
 
 class HotelController extends ApiController
 {
-    /**
+
+  public function __construct(){
+    parent::
+    $this->middleware('client.credentials');
+
+  }
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

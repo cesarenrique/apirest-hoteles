@@ -91,6 +91,9 @@ class Handler extends ExceptionHandler
           if($codigo==1451){
             return $this->errorResponse('No se puede eliminar el recurso porque esta relacionado con otro',409);
           }
+          if($codigo==1062){
+            return $this->errorResponse('No se puede crear el recurso porque ya hay un recurso existe parecido',409);
+          }
         }
         if(config('app.debug')){
           return parent::render($request, $exception);

@@ -7,6 +7,10 @@ use App\Http\Controllers\ApiController;
 use App\TipoHabitacion;
 class TipoHabitacionHabitacionController extends ApiController
 {
+    public function __construct(){
+      $this->middleware('client.credentials');
+
+    }
     /**
      * Display a listing of the resource.
      *

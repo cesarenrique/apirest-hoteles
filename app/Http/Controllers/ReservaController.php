@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Reserva;
@@ -12,7 +13,12 @@ use App\Pension;
 
 class ReservaController extends ApiController
 {
-    /**
+
+    public function __construct(){
+      $this->middleware('client.credentials');
+
+    }
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -63,8 +69,20 @@ class ReservaController extends ApiController
 
       $campos['pagado']=$alojamiento->precio;
 
-      $reserva=Reserva::create($campos);
-      return $this->showOne($reserva,201);
+      DB::transaction(function () use($campos) {
+          Reserva::create($campos);
+
+      });
+      $reserva_previo=Reserva::where('Cliente_id',$request->Cliente_id)
+       ->where('Alojamiento_id',$request->Alojamiento_id)
+       ->where('Habitacion_id',$request->Habitacion_id)
+       ->where('Fecha_id',$request->Fecha_id)->get();
+
+       if($reserva_previo->isEmpty()){
+         return errorResponse("Reserva no encontrada",405);
+       }
+       $reserva=$reserva_previo->first();
+       return $this->showOne($reserva,201);
 
     }
 
@@ -114,7 +132,7 @@ class ReservaController extends ApiController
          return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar',409);
       }
 
-      $reserva->save();
+      $reserva->saveOrFail();
 
       return $this->showOne($reserva);
     }
