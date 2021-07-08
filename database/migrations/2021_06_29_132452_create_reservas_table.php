@@ -16,7 +16,7 @@ class CreateReservasTable extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('reservado')->default(Reserva::LIBRE);
+            $table->string('reservado');
             $table->string('estado');
             $table->string('pagado');
             $table->bigInteger('Fecha_id')->unsigned();
@@ -29,6 +29,7 @@ class CreateReservasTable extends Migration
             $table->foreign('Cliente_id')->references('id')->on('clientes');
             $table->unique(['Fecha_id','Habitacion_id','Alojamiento_id']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

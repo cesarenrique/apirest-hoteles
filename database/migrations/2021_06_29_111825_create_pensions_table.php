@@ -19,6 +19,7 @@ class CreatePensionsTable extends Migration
             $table->bigInteger('Hotel_id')->unsigned();
             $table->foreign('Hotel_id')->references('id')->on('Hotels')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

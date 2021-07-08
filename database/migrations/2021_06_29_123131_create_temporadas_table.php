@@ -16,15 +16,12 @@ class CreateTemporadasTable extends Migration
         Schema::create('temporadas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tipo');
-            $table->Integer('dia_desde');
-            $table->Integer('mes_desde');
-            $table->Integer('anyo_desde');
-            $table->Integer('dia_hasta');
-            $table->Integer('mes_hasta');
-            $table->Integer('anyo_hasta');
+            $table->date('fecha_desde');
+            $table->date('fecha_hasta');
             $table->bigInteger('Hotel_id')->unsigned();
-            $table->foreign('Hotel_id')->references('id')->on('hotels');
+            $table->foreign('Hotel_id')->references('id')->on('hotels')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -15,11 +15,12 @@ class CreateHotelsTable extends Migration
     {
         Schema::create('hotels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('NIF');
+            $table->string('NIF')->unique();
             $table->string('nombre');
             $table->bigInteger('Localidad_id')->unsigned();
             $table->foreign('Localidad_id')->references('id')->on('Localidads')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
