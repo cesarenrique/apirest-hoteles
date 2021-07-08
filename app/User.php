@@ -32,7 +32,7 @@ class User extends Authenticatable
      */
     protected $dates=['deleted_at'];
     protected $fillable = [
-        'name', 'email', 'password', 'verified', 'verification_token', 'tipo_usuario',
+        'name', 'email', 'password', 'verified', 'tipo_usuario',
     ];
 
     /**
@@ -41,7 +41,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','verification_token',
+        'password', 'remember_token', 'verify_Token',
     ];
 
     /**

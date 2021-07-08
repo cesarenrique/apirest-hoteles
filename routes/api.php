@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('pais',PaisController::class,['only'=>['index','show']]);
 Route::resource('provincias',ProvinciaController::class,['only'=>['index','show']]);
 Route::resource('localidads',LocalidadController::class,['only'=>['index','show']]);
+Route::get('users/verify/{token}','UserController@verify')->name('verify');
 Route::resource('users',UserController::class,['except'=>['create','edit']]);
 Route::resource('hotels',HotelController::class,['except'=>['create','edit']]);
 Route::resource('pensions',PensionController::class,['except'=>['create','edit']]);

@@ -72,10 +72,21 @@ class RegisterController extends Controller
         ]);
         */
         $campos=$data;
+
         $campos['password']= bcrypt($data['password']);
         $campos['verified'] = User::USUARIO_NO_VERIFICADO;
-        $campos['verification_token']= User::generateVerificationToken();
         $campos['tipo_usuario']= User::USUARIO_CLIENTE;
-        return User::create($campos);
+
+        $usuario= User::create($campos);;
+
+        //$campos['verify_Token'] = User::generateVerificationToken();
+        //$usuario->verify_Token=$campos['verify_Token'];
+
+        $usuario->verify_Token=null;
+        $usuario->verified= User::USUARIO_VERIFICADO;
+        $usuario->save();
+
+        return $usuario;
+
     }
 }

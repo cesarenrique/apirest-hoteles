@@ -16,6 +16,10 @@ trait ApiResponse{
     return response()->json(['error'=>$message, 'code'=>$code],$code);
   }
 
+  protected function showMessage($message,$code=200){
+    return response()->json(['data'=>$message, 'code'=>$code],$code);
+  }
+
   protected function showAll(Collection $collection, $code=200){
     if($collection->isEmpty()){
       return $this->successResponse(['data'=>$collection],$code);
