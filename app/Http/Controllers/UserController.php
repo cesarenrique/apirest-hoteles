@@ -9,8 +9,8 @@ use App\User;
 class UserController extends ApiController
 {
     public function __construct(){
-      
-      $this->middleware('auth:api');
+
+      $this->middleware('auth:api')->only('index','store','destroy');
     }
     /**
      * Display a listing of the resource.
@@ -52,10 +52,16 @@ class UserController extends ApiController
         $campos=$request->all();
         $campos['password']= bcrypt($request->password);
         $campos['verified'] = User::USUARIO_NO_VERIFICADO;
-        $campos['verification_token']= User::generateVerificationToken();
+        //$campos['verify_Token']= User::generateVerificationToken();
         $campos['tipo_usuario']= User::USUARIO_CLIENTE;
 
         $usuario= User::create($campos);
+        //$campos['verify_Token'] = User::generateVerificationToken();
+        //$usuario->verify_Token=$campos['verify_Token'];
+        $user->verified = User::USUARIO_VERIFICADO;
+        $user->verify_Token=null;
+        $usuario->save();
+
         return $this->showOne($usuario,201);
     }
     /**
@@ -103,10 +109,11 @@ class UserController extends ApiController
             $user->name=$request->name;
         }
         if($request->has('email') && $user->email!=$request->email){
-            $user->verified=User::USUARIO_NO_VERIFICADO;
-            $user->verification_token=User::generateVerificationToken();
+            //$user->verified=User::USUARIO_NO_VERIFICADO;
+            //$user->verify_Token=User::generateVerificationToken();
             $user->email=$request->email;
-
+            $user->verified = User::USUARIO_VERIFICADO;
+            $user->verify_Token=null;
         }
         if($request->has('password')){
             $user->password=bcrypt($request->name);
@@ -138,5 +145,16 @@ class UserController extends ApiController
         $user= User::findOrFail($id);
         $user->delete();
         return $this->showOne($user);
+    }
+
+    public function verify($token){
+       $user= User::where('verify_Token',$token)->firstOrFail();
+
+       $user->verified = User::USUARIO_VERIFICADO;
+       $user->verify_Token=null;
+
+       $user->save();
+
+       return $this->showMessage("la cuenta ha sido verificada");
     }
 }
