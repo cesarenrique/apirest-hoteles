@@ -18,6 +18,35 @@ class ClienteController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+     /**
+     * @SWG\Get(
+     *   path="/clientes",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Clientes",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Cliente")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function index()
     {
         $clientes=Cliente::all();
@@ -40,6 +69,48 @@ class ClienteController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Post(
+     *   path="/clientes",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Create Cliente for store",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="nombre", type="string", example="nombre apellido"),
+     *            @SWG\Property(property="email", type="string", example="nombre@gmail.com"),
+     *            @SWG\Property(property="NIF", type="string", example="12345678Z"),
+     *            @SWG\Property(property="telefono", type="string", example="666777888"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Cliente")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function store(Request $request)
     {
       $rules=[
@@ -61,6 +132,46 @@ class ClienteController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/clientes/{cliente_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Cliente",
+     *		  @SWG\Parameter(
+     *          name="cliente_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Cliente")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function show($id)
     {
         $cliente=Cliente::findOrFail($id);
@@ -85,6 +196,58 @@ class ClienteController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Put(
+     *   path="/clientes/{cliente_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Update Cliente",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="cliente_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=false,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="nombre", type="string", example="nombre apellido"),
+     *            @SWG\Property(property="email", type="string", example="nombre@gmail.com"),
+     *            @SWG\Property(property="NIF", type="string", example="12345678Z"),
+     *            @SWG\Property(property="telefono", type="string", example="666777888"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Cliente")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function update(Request $request, $id)
     {
       $cliente=Cliente::findOrFail($id);
@@ -122,6 +285,46 @@ class ClienteController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+     /**
+     * @SWG\Delete(
+     *   path="/clientes/{cliente_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Delete Cliente",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="cliente_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Cliente")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function destroy($id)
     {
       $cliente=Cliente::findOrFail($id);

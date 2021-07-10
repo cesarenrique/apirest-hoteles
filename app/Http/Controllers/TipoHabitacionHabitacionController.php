@@ -16,6 +16,38 @@ class TipoHabitacionHabitacionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+     /**
+     * @SWG\Get(
+     *   path="/tipo_habitacions/{tipo_id}/habitacions",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Tipo Habitaciones -> Habitaciones",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Habitacion")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function index($tipohab_id)
     {
         $tipohab=TipoHabitacion::findOrFail($tipohab_id);

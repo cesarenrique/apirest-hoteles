@@ -17,6 +17,36 @@ class PensionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/pensions",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Pensiones",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Pension")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function index()
     {
         $pensiones=Pension::all();
@@ -40,6 +70,46 @@ class PensionController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Post(
+     *   path="/pensions",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Create Pension for store",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="tipo", type="string", example="Desayuno delux"),
+     *            @SWG\Property(property="Hotel_id", type="integer", example=1),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Pension")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function store(Request $request)
     {
         $rules=[
@@ -58,6 +128,46 @@ class PensionController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/pensions/{pension_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Pension",
+     *		  @SWG\Parameter(
+     *          name="pension_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Pension")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function show($id)
     {
         $pension=Pension::findOrFail($id);
@@ -82,6 +192,56 @@ class PensionController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Put(
+     *   path="/pensions/{pension_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Update Pension",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="pension_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=false,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="tipo", type="string", example="Desayuno delux"),
+     *            @SWG\Property(property="Hotel_id", type="integer", example=1),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Update successful operation",
+     *      @SWG\Schema(ref="#definitions/Pension")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function update(Request $request, $id)
     {
         $pension=Pension::findOrFail($id);
@@ -114,6 +274,46 @@ class PensionController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Delete(
+     *   path="/pensions/{pension_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Delete Pensions",
+     *		  @SWG\Parameter(
+     *          name="pension_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Pension")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function destroy($id)
     {
         $pension=Pension::findOrFail($id);

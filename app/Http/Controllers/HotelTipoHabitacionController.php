@@ -18,6 +18,46 @@ class HotelTipoHabitacionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/hotels/{hotel_id}/tipo_habitacions",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Hoteles tipos habitaciones",
+     *		  @SWG\Parameter(
+     *          name="hotel_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/TipoHabitacion")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function index(Hotel $hotel)
     {
         $tipos=$hotel->tipo_habitacions;

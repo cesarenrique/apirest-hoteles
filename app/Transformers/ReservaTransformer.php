@@ -40,6 +40,7 @@ class ReservaTransformer extends TransformerAbstract
           'AlojamientoIdentificador'=>(int)$reserva->Alojamiento_id,
           'HabitacionIdentificador'=>(int)$reserva->Habitacion_id,
           'FechaIdentificador'=>(int)$reserva->Fecha_id,
+          'ClienteIdentificador'=> (int)$reserva->Cliente_id,
           'fechaCreacion'=>(string)$reserva->created_at,
           'fechaActualizacion'=>(string)$reserva->updated_at,
           'fechaEliminacion'=>isset($reserva->deleted_at) ?(string)$reserva->deteted_at: null,
