@@ -18,6 +18,36 @@ class TarjetaController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+     /**
+     * @SWG\Get(
+     *   path="/tarjetas",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Tarjetas",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Tarjeta")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
+
     public function index()
     {
         $tarjetas=Tarjeta::all();
@@ -40,6 +70,47 @@ class TarjetaController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+          /**
+          * @SWG\Post(
+          *   path="/tarjetas",
+          *   security={
+          *     {"passport": {}},
+          *   },
+          *   summary="Create Tarjeta for store",
+          *     @SWG\Parameter(
+          *         name="Autorization",
+          *         in="header",
+          *         required=true,
+          *         type="string",
+          *         description="Bearer {token_access}",
+          *    ),
+          *		  @SWG\Parameter(
+          *          name="data",
+          *          in="body",
+          *          required=true,
+          *          @SWG\Schema(
+          *            @SWG\Property(property="Cliente_id", type="integer", example=1),
+          *            @SWG\Property(property="numero", type="string", example="1231331313321"),
+          *          ),
+          *      ),
+          *   @SWG\Response(
+          *      response=201,
+          *      description="Create successful operation",
+          *      @SWG\Schema(ref="#definitions/Tarjeta")
+          *   ),
+          *   @SWG\Response(response=403, description="Autorization Exception",
+          *      @SWG\Schema(ref="#definitions/Errors403")
+          *   ),
+          *   @SWG\Response(
+          *      response=500,
+          *      description="internal server error",
+          *      @SWG\Schema(ref="#definitions/Errors500")
+          *   )
+          *)
+          *
+          **/
     public function store(Request $request)
     {
       $rules=[
@@ -58,6 +129,46 @@ class TarjetaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/tarjetas/{tarjeta_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Tarjeta",
+     *		  @SWG\Parameter(
+     *          name="tarjeta_id",
+     *          in="path",
+     *          required=true,
+     *          type="integer",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Reserva")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function show($id)
     {
       $tarjeta=Cliente::findOrFail($id);
@@ -82,6 +193,56 @@ class TarjetaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Put(
+     *   path="/tarjetas/{tarjeta_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Update Tarjeta",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="tarjeta_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=false,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="Cliente_id", type="integer", example=1),
+     *            @SWG\Property(property="numero", type="string", example="1231331313321"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Update successful operation",
+     *      @SWG\Schema(ref="#definitions/Reserva")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function update(Request $request, $id)
     {
       $tarjeta=Cliente::findOrFail($id);
@@ -109,6 +270,46 @@ class TarjetaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Delete(
+     *   path="/tarjetas/{tarjeta_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Delete Tarjeta",
+     *		  @SWG\Parameter(
+     *          name="tarjeta_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Reserva")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function destroy($id)
     {
       $tarjeta=Cliente::findOrFail($id);

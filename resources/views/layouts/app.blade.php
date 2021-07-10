@@ -34,8 +34,9 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                       @if (Auth::check())
-                      <li><a href="{{route('personal-tokens')}}">My tokens</a></li>
+                        <li><a href="{{route('personal-tokens')}}">My tokens</a></li>
                       @endif
+                      <li><a href="{{route('l5-swagger.api')}}">API documentation</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

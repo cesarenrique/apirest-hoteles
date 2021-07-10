@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\User;
 
+
+
+
 class UserController extends ApiController
 {
     public function __construct(){
@@ -13,10 +16,24 @@ class UserController extends ApiController
       $this->middleware('auth:api')->only('index','store','destroy');
     }
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * @SWG\Get(
+    *   path="/users",
+    *   security={
+    *     {"passport": {}},
+    *   },
+    *   summary="Get Users",
+    *   @SWG\Response(response=200, description="successful operation",
+    *     @SWG\Schema(
+    *         type="array",
+    *         @SWG\Items(ref="#definitions/User")
+    *     )
+    *   ),
+    *   @SWG\Response(response=500, description="internal server error",
+    *      @SWG\Schema(ref="#definitions/Errors")
+    *   ),
+    *)
+    *
+    */
     public function index()
     {
         $usuarios=User::all();
@@ -40,6 +57,38 @@ class UserController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Post(
+     *   path="/users",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Create Users for store",
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="name", type="string", example="nombre apellido"),
+     *            @SWG\Property(property="email", type="string", example="nombre@gmail.com"),
+     *            @SWG\Property(property="password", type="string", example="secret1234E"),
+     *            @SWG\Property(property="password_confirmation", type="string", example="secret1234E"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/User")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors")
+     *   )
+     *)
+     *
+     **/
     public function store(Request $request)
     {
         //
@@ -70,6 +119,37 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/users/{user_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Ver un usuario",
+     *		  @SWG\Parameter(
+     *          name="user_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *   @SWG\Response(
+     *      response=200,
+     *      description="Show one User successful operation",
+     *      @SWG\Schema(ref="#definitions/User")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors")
+     *   )
+     *)
+     *
+     **/
     public function show($id)
     {
         $usuario=User::findOrFail($id);
@@ -95,6 +175,48 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Put(
+     *   path="/users/{user_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="update User",
+     *		  @SWG\Parameter(
+     *          name="user_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=false,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="name", type="string", example="nombre apellido"),
+     *            @SWG\Property(property="email", type="string", example="nombre@gmail.com"),
+     *            @SWG\Property(property="password", type="string", example="secret1234E"),
+     *            @SWG\Property(property="password_confirmation", type="string", example="secret1234E"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=200,
+     *      description="Update User successful operation",
+     *      @SWG\Schema(ref="#definitions/User")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors")
+     *   )
+     *)
+     *
+     **/
     public function update(Request $request, $id)
     {
         //
@@ -140,6 +262,34 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Delete(
+     *   path="/users/{user_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="update User",
+     *		  @SWG\Parameter(
+     *          name="user_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *   @SWG\Response(
+     *      response=200,
+     *      description="Delete User successful operation",
+     *      @SWG\Schema(ref="#definitions/User")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors")
+     *   )
+     *)
+     *
+     **/
     public function destroy($id)
     {
         $user= User::findOrFail($id);

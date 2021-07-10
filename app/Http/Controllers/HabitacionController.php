@@ -18,6 +18,36 @@ class HabitacionController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/habitacions",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Habitaciones",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Habitacion")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function index()
     {
         $habitacion=Habitacion::all();
@@ -40,6 +70,53 @@ class HabitacionController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Post(
+     *   path="/habitacions",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Create Habitacion for store",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="numero", type="string", example="120"),
+     *            @SWG\Property(property="Hotel_id", type="integer", example=1),
+     *            @SWG\Property(property="tipo_habitacions", type="integer", example=1)
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Habitacion")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=406, description="Not Aceptable",
+     *      @SWG\Schema(ref="#definitions/Errors406")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function store(Request $request)
     {
         $rules=[
@@ -53,7 +130,7 @@ class HabitacionController extends ApiController
         $tipohab=TipoHabitacion::findOrFail($request->tipo_habitacion_id);
         if($tipohab->Hotel_id!=$request->Hotel_id){
            return $this->errorResponse('El id de Hotel del tipo de habitación
-           debe ser mismo hotel que se desea crear la habitación',401);
+           debe ser mismo hotel que se desea crear la habitación',406);
         }
         $habitacion=Habitacion::create($campos);
         return $this->showOne($habitacion,201);
@@ -65,6 +142,45 @@ class HabitacionController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+     /**
+     * @SWG\Get(
+     *   path="/habitacions/{habitacion_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Habitacion",
+     *		  @SWG\Parameter(
+     *          name="habitacion_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Habitacion")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function show($id)
     {
         $habitacion=Habitacion::findOrFail($id);
@@ -89,6 +205,60 @@ class HabitacionController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Put(
+     *   path="/habitacions/{habitacion_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Update Habitacion",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="habitacion_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=false,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="numero", type="string", example="120"),
+     *            @SWG\Property(property="Hotel_id", type="integer", example=1),
+     *            @SWG\Property(property="tipo_habitacions", type="integer", example=1),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=200,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Habitacion")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=406, description="Not Aceptable",
+     *      @SWG\Schema(ref="#definitions/Errors406")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function update(Request $request, $id)
     {
         $habitacion=Habitacion::findOrFail($id);
@@ -141,6 +311,46 @@ class HabitacionController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Delete(
+     *   path="/habitacions/{habitacion_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Delete Habitacion",
+     *		  @SWG\Parameter(
+     *          name="habitacion_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Habitacion")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function destroy($id)
     {
       $habitacion=Habitacion::findOrFail($id);

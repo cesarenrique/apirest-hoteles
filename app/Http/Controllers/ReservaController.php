@@ -23,6 +23,36 @@ class ReservaController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/reservas",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Reservas",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Reserva")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function index()
     {
         $reservas=Reserva::all();
@@ -45,6 +75,50 @@ class ReservaController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Post(
+     *   path="/reservas",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Create Reserva for store",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=true,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="tipo", type="string", example="Desayuno delux"),
+     *            @SWG\Property(property="Fecha_id", type="integer", example=1),
+     *            @SWG\Property(property="Habitacion_id", type="integer", example=1),
+     *            @SWG\Property(property="Alojamiento_id", type="integer", example=1),
+     *            @SWG\Property(property="Cliente_id", type="integer", example=1),
+     *            @SWG\Property(property="Tarjeta", type="string", example="1231331313321"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Create successful operation",
+     *      @SWG\Schema(ref="#definitions/Reserva")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function store(Request $request)
     {
       $rules=[
@@ -92,6 +166,45 @@ class ReservaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+     /**
+     * @SWG\Get(
+     *   path="/reservas/{reserva_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Reserva",
+     *		  @SWG\Parameter(
+     *          name="reserva_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Reserva")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function show($id)
     {
         $reserva=Reserva::findOrFail($id);
@@ -116,6 +229,60 @@ class ReservaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Put(
+     *   path="/reservas/{reserva_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Update Reserva",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="reserva_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="data",
+     *          in="body",
+     *          required=false,
+     *          @SWG\Schema(
+     *            @SWG\Property(property="tipo", type="string", example="Desayuno delux"),
+     *            @SWG\Property(property="Fecha_id", type="integer", example=1),
+     *            @SWG\Property(property="Habitacion_id", type="integer", example=1),
+     *            @SWG\Property(property="Alojamiento_id", type="integer", example=1),
+     *            @SWG\Property(property="Cliente_id", type="integer", example=1),
+     *            @SWG\Property(property="Tarjeta", type="string", example="1231331313321"),
+     *          ),
+     *      ),
+     *   @SWG\Response(
+     *      response=201,
+     *      description="Update successful operation",
+     *      @SWG\Schema(ref="#definitions/Reserva")
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(
+     *      response=500,
+     *      description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   )
+     *)
+     *
+     **/
     public function update(Request $request, $id)
     {
       $reserva=Reserva::findOrFail($id);
@@ -143,6 +310,46 @@ class ReservaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Delete(
+     *   path="/reservas/{reserva_id}",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Delete Reserva",
+     *		  @SWG\Parameter(
+     *          name="reserva_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Reserva")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function destroy($id)
     {
       $reserva=Reserva::findOrFail($id);

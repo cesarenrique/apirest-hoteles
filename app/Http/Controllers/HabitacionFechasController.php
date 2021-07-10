@@ -17,7 +17,49 @@ class HabitacionFechasController extends ApiController
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     **/
+
+
+          /**
+          * @SWG\Get(
+          *   path="/habitacions/{habitacion_id}/fechas",
+          *   security={
+          *     {"passport": {}},
+          *   },
+          *   summary="Get Habitacion table All Fechas",
+          *     @SWG\Parameter(
+          *         name="Autorization",
+          *         in="header",
+          *         required=true,
+          *         type="string",
+          *         description="Bearer {token_access}",
+          *    ),
+          *		  @SWG\Parameter(
+          *          name="habitacion_id",
+          *          in="path",
+          *          required=true,
+          *          type="string",
+          *          description="un numero id"
+          *      ),
+          *   @SWG\Response(response=200, description="successful operation",
+          *     @SWG\Schema(
+          *         type="array",
+          *         @SWG\Items(ref="#definitions/Fecha")
+          *     )
+          *   ),
+          *   @SWG\Response(response=403, description="Autorization Exception",
+          *      @SWG\Schema(ref="#definitions/Errors403")
+          *   ),
+          *   @SWG\Response(response=404, description="Not Found Exception",
+          *      @SWG\Schema(ref="#definitions/Errors404")
+          *   ),
+          *   @SWG\Response(response=500, description="internal server error",
+          *      @SWG\Schema(ref="#definitions/Errors500")
+          *   ),
+          *)
+          *
+          **/
+
     public function index(Habitacion $habitacion)
     {
         $hotel=Hotel::findOrFail($habitacion->Hotel_id);
@@ -123,6 +165,60 @@ class HabitacionFechasController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/habitacions/{habitacion_id}/fechas/libre",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Habitacion table All Fechas",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="habitacion_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="fecha_desde",
+     *          in="query",
+     *          required=true,
+     *          type="string",
+     *          description="una fecha de comienzo"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="fecha_hasta",
+     *          in="query",
+     *          required=true,
+     *          type="string",
+     *          description="una fecha de fin"
+     *      ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Fecha")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function libre(Request $request,$id)
     {
       $habitacion=Habitacion::findOrFail($id);
@@ -178,6 +274,60 @@ class HabitacionFechasController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /**
+     * @SWG\Get(
+     *   path="/habitacions/{habitacion_id}/fechas/ocupado",
+     *   security={
+     *     {"passport": {}},
+     *   },
+     *   summary="Get Habitacion table All Fechas",
+     *     @SWG\Parameter(
+     *         name="Autorization",
+     *         in="header",
+     *         required=true,
+     *         type="string",
+     *         description="Bearer {token_access}",
+     *    ),
+     *		  @SWG\Parameter(
+     *          name="habitacion_id",
+     *          in="path",
+     *          required=true,
+     *          type="string",
+     *          description="un numero id"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="fecha_desde",
+     *          in="query",
+     *          required=true,
+     *          type="string",
+     *          description="una fecha de comienzo"
+     *      ),
+     *		  @SWG\Parameter(
+     *          name="fecha_hasta",
+     *          in="query",
+     *          required=true,
+     *          type="string",
+     *          description="una fecha de fin"
+     *      ),
+     *   @SWG\Response(response=200, description="successful operation",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref="#definitions/Fecha")
+     *     )
+     *   ),
+     *   @SWG\Response(response=403, description="Autorization Exception",
+     *      @SWG\Schema(ref="#definitions/Errors403")
+     *   ),
+     *   @SWG\Response(response=404, description="Not Found Exception",
+     *      @SWG\Schema(ref="#definitions/Errors404")
+     *   ),
+     *   @SWG\Response(response=500, description="internal server error",
+     *      @SWG\Schema(ref="#definitions/Errors500")
+     *   ),
+     *)
+     *
+     **/
     public function ocupado(Request $request,$id)
     {
       $habitacion=Habitacion::findOrFail($id);
