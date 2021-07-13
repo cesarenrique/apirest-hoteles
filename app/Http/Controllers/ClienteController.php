@@ -121,8 +121,8 @@ class ClienteController extends ApiController
       ];
       $this->validate($request,$rules);
       $campos=$request->all();
-      $hotel=Cliente::create($campos);
-      return $this->showOne($hotel,201);
+      $cliente=Cliente::create($campos);
+      return $this->showOne($cliente,201);
 
     }
 
@@ -330,5 +330,18 @@ class ClienteController extends ApiController
       $cliente=Cliente::findOrFail($id);
       $cliente->delete();
       return $this->showOne($cliente);
+    }
+
+
+    public function lookforNIF(Request $request)
+    {
+      $rules=[
+        'NIF'=> 'required|min:8'
+      ];
+      $this->validate($request,$rules);
+
+      $clientes=Cliente::where('NIF',$request->NIF)->get();
+      return $this->showAll($clientes);
+
     }
 }

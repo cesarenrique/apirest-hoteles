@@ -48,6 +48,10 @@ class ProvinciaTransformer extends TransformerAbstract
                   'rel'=>'pais.hotels',
                   'href'=> route('provincias.hotels.index',$provincia->id),
               ],
+              [
+                  'rel'=>'provincias.localidads',
+                  'href'=> route('provincias.localidads.index',$provincia->id),
+              ],
           ],
         ];
     }

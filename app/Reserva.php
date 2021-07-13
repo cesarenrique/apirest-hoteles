@@ -13,9 +13,12 @@ class Reserva extends Model
 
     const LIBRE='libre';
     const RESERVADO='reservado';
+    const PRERESERVADO='prereservado';
 
     const PAGADO_TOTALMENTE="totalmente pagado";
     const PAGADO_PARCIALMENTE="parcialmente pagado";
+    const PENDIENTE_PAGO="pendiente pago";
+
 
     public $transformer= ReservaTransformer::class;
     protected $dates=['deleted_at'];

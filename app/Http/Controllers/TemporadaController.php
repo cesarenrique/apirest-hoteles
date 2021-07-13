@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Temporada;
+use Carbon\Carbon;
+use DateTime;
+use App\Hotel;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class TemporadaController extends ApiController
 {
@@ -133,9 +138,70 @@ class TemporadaController extends ApiController
         if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
            return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
         }
+        $fecha_desde_porcion=explode("-",$fecha_desde);
+        $fecha_hasta_porcion=explode("-",$fecha_hasta);
+
+        $fechaDesde=Carbon::createFromDate($fecha_desde_porcion[0],$fecha_desde_porcion[1],$fecha_desde_porcion[2]);
+        $fechaHasta=Carbon::createFromDate($fecha_hasta_porcion[0],$fecha_hasta_porcion[1],$fecha_hasta_porcion[2]);
+
+        if($fechaHasta<$fechaDesde){
+           return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
+        }
 
         $campos=$request->all();
 
+        $hotel=Hotel::findOrFail($request->Hotel_id);
+        $temporadas=$hotel->temporadas;
+        $collection=new Collection();
+        $perteneceUna=false;
+        foreach ($temporadas as $temporada) {
+          $fecha_inicio=$temporada->fecha_desde;
+          $fecha_limite=$temporada->fecha_hasta;
+
+          $fecha_inicio_porcion=explode("-",$fecha_inicio);
+          $fecha_limite_porcion=explode("-",$fecha_limite);
+
+          $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+          $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+
+          if($fechaInicio<=$fechaDesde && $fechaHasta<=$fechaLimite){
+              $perteneceUna=true;
+              $collection->push($temporada);
+          }
+        }
+
+        if($perteneceUna){
+          return $this->errorResponse("Una temporada no puede pertenecer a otra temporada",406);
+        }
+
+        $dias=0;
+        if($perteneceUna==false){
+
+          foreach ($temporadas as $temporada) {
+            $fecha_inicio=$temporada->fecha_desde;
+            $fecha_limite=$temporada->fecha_hasta;
+
+            $fecha_inicio_porcion=explode("-",$fecha_inicio);
+            $fecha_limite_porcion=explode("-",$fecha_limite);
+
+            $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+            $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+            $diferencia=0;
+            if($fechaInicio<=$fechaDesde && $fechaDesde<=$fechaLimite){
+                $diferencia=$fechaDesde->diffInDays($fechaLimite->addDay());
+            }
+            if($fechaInicio<=$fechaHasta && $fechaHasta<=$fechaLimite){
+                $diferencia=$fechaInicio->diffInDays($fechaHasta->addDay());
+            }
+            if($fechaDesde<=$fechaInicio && $fechaLimite<=$fechaHasta){
+                $diferencia=$fechaInicio->diffInDays($fechaLimite);
+            }
+            $dias+=$diferencia;
+          }
+        }
+        if($dias>0){
+          return $this->errorResponse("Una temporada no puede pertenecer a otra temporada parcialmente ni contener otra",406);
+        }
         $temporada=Temporada::create($campos);
         return $this->showOne($temporada,201);
     }
@@ -318,5 +384,161 @@ class TemporadaController extends ApiController
       $temporada=Temporada::findOrFail($id);
       $temporada->delete();
       return $this->showOne($temporada);
+    }
+
+    public function pertenece(Request $request,$Hotel_id){
+      $rules=[
+        'fecha_desde'=> 'required',
+        'fecha_hasta'=> 'required',
+      ];
+
+      $this->validate($request,$rules);
+      $fecha_desde=(string)$request->fecha_desde;
+      if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_desde))){
+         return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+      }
+
+      $fecha_hasta=(string)$request->fecha_hasta;
+      if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
+         return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+      }
+      $fecha_desde_porcion=explode("-",$fecha_desde);
+      $fecha_hasta_porcion=explode("-",$fecha_hasta);
+
+      $fechaDesde=Carbon::createFromDate($fecha_desde_porcion[0],$fecha_desde_porcion[1],$fecha_desde_porcion[2]);
+      $fechaHasta=Carbon::createFromDate($fecha_hasta_porcion[0],$fecha_hasta_porcion[1],$fecha_hasta_porcion[2]);
+
+      if($fechaHasta<$fechaDesde){
+         return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
+      }
+
+      $hotel=Hotel::findOrFail($Hotel_id);
+      $temporadas=$hotel->temporadas;
+      $collection=new Collection();
+      $perteneceUna=false;
+      foreach ($temporadas as $temporada) {
+        $fecha_inicio=$temporada->fecha_desde;
+        $fecha_limite=$temporada->fecha_hasta;
+
+        $fecha_inicio_porcion=explode("-",$fecha_inicio);
+        $fecha_limite_porcion=explode("-",$fecha_limite);
+
+        $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+        $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+
+
+        if($fechaInicio<=$fechaDesde && $fechaHasta<=$fechaLimite){
+            $perteneceUna=true;
+            $collection->push($temporada);
+        }
+      }
+      if($perteneceUna==false){
+        foreach ($temporadas as $temporada) {
+          $fecha_inicio=$temporada->fecha_desde;
+          $fecha_limite=$temporada->fecha_hasta;
+
+          $fecha_inicio_porcion=explode("-",$fecha_inicio);
+          $fecha_limite_porcion=explode("-",$fecha_limite);
+
+          $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+          $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+
+          if($fechaInicio<=$fechaDesde && $fechaDesde<=$fechaLimite){
+              $collection->push($temporada);
+          }
+          if($fechaInicio<=$fechaHasta && $fechaHasta<=$fechaLimite){
+            $collection->push($temporada);
+          }
+          if($fechaDesde<=$fechaInicio && $fechaLimite<=$fechaHasta){
+            $collection->push($temporada);
+          }
+        }
+      }
+
+      return $this->showAll($collection);
+
+    }
+
+
+    public function puedeReservarse(Request $request,$Hotel_id){
+      $rules=[
+        'fecha_desde'=> 'required',
+        'fecha_hasta'=> 'required',
+      ];
+
+      $this->validate($request,$rules);
+      $valido=$this->puedeReservarseValidar($Hotel_id,$request->fecha_desde,$request->fecha_hasta);
+      return $this->showOne2($valido);
+    }
+
+
+
+  public function extraerIdTemporada($Hotel_id,$fecha_desde,$fecha_hasta){
+
+      if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_desde))){
+         return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+      }
+
+      if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
+         return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+      }
+      $fecha_desde_porcion=explode("-",$fecha_desde);
+      $fecha_hasta_porcion=explode("-",$fecha_hasta);
+
+      $fechaDesde=Carbon::createFromDate($fecha_desde_porcion[0],$fecha_desde_porcion[1],$fecha_desde_porcion[2]);
+      $fechaHasta=Carbon::createFromDate($fecha_hasta_porcion[0],$fecha_hasta_porcion[1],$fecha_hasta_porcion[2]);
+
+      if($fechaHasta<$fechaDesde){
+         return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
+      }
+
+      $hotel=Hotel::findOrFail($Hotel_id);
+      $temporadas=$hotel->temporadas;
+      $collection=new Collection();
+      $perteneceUna=false;
+      foreach ($temporadas as $temporada) {
+        $fecha_inicio=$temporada->fecha_desde;
+        $fecha_limite=$temporada->fecha_hasta;
+
+        $fecha_inicio_porcion=explode("-",$fecha_inicio);
+        $fecha_limite_porcion=explode("-",$fecha_limite);
+
+        $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+        $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+
+        if($fechaInicio<=$fechaDesde && $fechaHasta<=$fechaLimite){
+            $perteneceUna=true;
+            $collection->push($temporada);
+        }
+      }
+      $dias=0;
+      if($perteneceUna==false){
+
+        foreach ($temporadas as $temporada) {
+          $fecha_inicio=$temporada->fecha_desde;
+          $fecha_limite=$temporada->fecha_hasta;
+
+          $fecha_inicio_porcion=explode("-",$fecha_inicio);
+          $fecha_limite_porcion=explode("-",$fecha_limite);
+
+          $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+          $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+          $diferencia=array();
+          $diferencia['temporada_completa']='0';
+          if($fechaInicio<=$fechaDesde && $fechaDesde<=$fechaLimite){
+              $diferencia['temporada_principio']=$temporada->id;
+          }
+          if($fechaInicio<=$fechaHasta && $fechaHasta<=$fechaLimite){
+              $diferencia['temporada_completa']+=(string)$temporada->id;
+
+          }
+          if($fechaDesde<=$fechaInicio && $fechaLimite<=$fechaHasta){
+              $diferencia['temporada_fin']=$temporada->id;
+          }
+          $dias+=$diferencia;
+        }
+      }
+
+      return $this->showOne2($diferencia);
     }
 }

@@ -33,4 +33,8 @@ class Hotel extends Model
     public function fechas(){
         return $this->hasMany(Fecha::class);
     }
+
+    public function temporadas(){
+        return $this->hasMany(Temporada::class);
+    }
 }

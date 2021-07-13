@@ -46,6 +46,14 @@ class AlojamientoTransformer extends TransformerAbstract
                   'rel'=>'self',
                   'href'=> route('alojamientos.show',$alojamiento->id),
               ],
+              [
+                  'rel'=>'alojamientos.hotels',
+                  'href'=> route('alojamientos.hotels.index',$alojamiento->id),
+              ],
+              [
+                  'rel'=>'alojamientos.habitacions',
+                  'href'=> route('alojamientos.habitacions.index',$alojamiento->id),
+              ],
             ],
         ];
     }

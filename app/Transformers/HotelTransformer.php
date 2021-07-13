@@ -73,10 +73,6 @@ class HotelTransformer extends TransformerAbstract
                   'rel'=>'hotels.alojamientos.generar',
                   'href'=> route('hotels.alojamientos.generar',$hotel->id),
               ],
-              [
-                  'rel'=>'hotels.alojamientos.generar',
-                  'href'=> route('hotels.alojamientos.generar',$hotel->id),
-              ],
           ],
         ];
     }

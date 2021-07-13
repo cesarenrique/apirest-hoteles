@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Cliente;
-
+use App\Tarjeta;
 class ClienteTarjetaController extends ApiController
 {
 
@@ -88,9 +88,15 @@ class ClienteTarjetaController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$tarjeta_id)
     {
-        //
+      $cliente=Cliente::findOrFail($id);
+
+      $tarjeta=Tarjeta::findOrFail($tarjeta_id);
+      if($tarjeta->Cliente_id!=$cliente->id){
+        return $this->errorResponse("La tarjeta tiene que ser del mismo cliente",404);
+      }
+      return $this->showOne($tarjeta);
     }
 
     /**

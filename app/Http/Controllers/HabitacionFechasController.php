@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Habitacion;
 use App\Hotel;
+use Carbon\Carbon;
+
 class HabitacionFechasController extends ApiController
 {
 
@@ -237,6 +239,17 @@ class HabitacionFechasController extends ApiController
       if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
          return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
       }
+
+      $fecha_desde_porcion=explode("-",$fecha_desde);
+      $fecha_hasta_porcion=explode("-",$fecha_hasta);
+
+      $fechaDesde=Carbon::createFromDate($fecha_desde_porcion[0],$fecha_desde_porcion[1],$fecha_desde_porcion[2]);
+      $fechaHasta=Carbon::createFromDate($fecha_hasta_porcion[0],$fecha_hasta_porcion[1],$fecha_hasta_porcion[2]);
+
+      if($fechaHasta<$fechaDesde){
+         return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
+      }
+
       $hotel=Hotel::findOrFail($habitacion->Hotel_id);
       $fechas=$hotel->fechas->whereBetween('abierto',[$fecha_desde,$fecha_hasta]);
       $reservas=$habitacion->reservas;
@@ -346,6 +359,17 @@ class HabitacionFechasController extends ApiController
       if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
          return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
       }
+
+      $fecha_desde_porcion=explode("-",$fecha_desde);
+      $fecha_hasta_porcion=explode("-",$fecha_hasta);
+
+      $fechaDesde=Carbon::createFromDate($fecha_desde_porcion[0],$fecha_desde_porcion[1],$fecha_desde_porcion[2]);
+      $fechaHasta=Carbon::createFromDate($fecha_hasta_porcion[0],$fecha_hasta_porcion[1],$fecha_hasta_porcion[2]);
+
+      if($fechaHasta<$fechaDesde){
+         return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
+      }
+
       $hotel=Hotel::findOrFail($habitacion->Hotel_id);
       $fechas=$hotel->fechas->whereBetween('abierto',[$fecha_desde,$fecha_hasta]);
       $reservas=$habitacion->reservas;

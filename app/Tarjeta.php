@@ -11,5 +11,7 @@ class Tarjeta extends Model
     use SoftDeletes;
     public $transformer= TarjetaTransformer::class;
     protected $dates=['deleted_at'];
-
+    protected $fillable = [
+        'id','numero', 'Cliente_id',
+    ];
 }

@@ -27,7 +27,7 @@ class CreateReservasTable extends Migration
             $table->foreign('Alojamiento_id')->references('id')->on('alojamientos');
             $table->foreign('Habitacion_id')->references('id')->on('habitacions');
             $table->foreign('Cliente_id')->references('id')->on('clientes');
-            $table->unique(['Fecha_id','Habitacion_id','Alojamiento_id']);
+            $table->unique(['Fecha_id','Habitacion_id']);
             $table->timestamps();
             $table->softDeletes();
         });

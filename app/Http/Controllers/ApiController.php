@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\ApiResponse;
+use App\Temporada;
+use Carbon\Carbon;
+use DateTime;
+use App\Hotel;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @SWG\Swagger(
@@ -186,4 +192,80 @@ use App\Http\Traits\ApiResponse;
 class ApiController extends Controller
 {
     use ApiResponse;
+
+    public function puedeReservarseValidar($Hotel_id,$fecha_desde,$fecha_hasta){
+
+      if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_desde))){
+         return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+      }
+
+      if(!(preg_match_all('/^(\d{4})(-)(0[1-9]|1[0-2])(-)([0-2][0-9]|3[0-1])$/',$fecha_hasta))){
+         return $this->errorResponse("la fecha tiene que ser formato yyyy-MM-dd y una fecha valida",401);
+      }
+      $fecha_desde_porcion=explode("-",$fecha_desde);
+      $fecha_hasta_porcion=explode("-",$fecha_hasta);
+
+      $fechaDesde=Carbon::createFromDate($fecha_desde_porcion[0],$fecha_desde_porcion[1],$fecha_desde_porcion[2]);
+      $fechaHasta=Carbon::createFromDate($fecha_hasta_porcion[0],$fecha_hasta_porcion[1],$fecha_hasta_porcion[2]);
+
+      if($fechaHasta<$fechaDesde){
+         return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
+      }
+
+      $hotel=Hotel::findOrFail($Hotel_id);
+      $temporadas=$hotel->temporadas;
+      $collection=new Collection();
+      $perteneceUna=false;
+      foreach ($temporadas as $temporada) {
+        $fecha_inicio=$temporada->fecha_desde;
+        $fecha_limite=$temporada->fecha_hasta;
+
+        $fecha_inicio_porcion=explode("-",$fecha_inicio);
+        $fecha_limite_porcion=explode("-",$fecha_limite);
+
+        $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+        $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+
+        if($fechaInicio<=$fechaDesde && $fechaHasta<=$fechaLimite){
+            $perteneceUna=true;
+            $collection->push($temporada);
+        }
+      }
+      $dias=0;
+      if($perteneceUna==false){
+
+        foreach ($temporadas as $temporada) {
+          $fecha_inicio=$temporada->fecha_desde;
+          $fecha_limite=$temporada->fecha_hasta;
+
+          $fecha_inicio_porcion=explode("-",$fecha_inicio);
+          $fecha_limite_porcion=explode("-",$fecha_limite);
+
+          $fechaInicio=Carbon::createFromDate($fecha_inicio_porcion[0],$fecha_inicio_porcion[1],$fecha_inicio_porcion[2]);
+          $fechaLimite=Carbon::createFromDate($fecha_limite_porcion[0],$fecha_limite_porcion[1],$fecha_limite_porcion[2]);
+          $diferencia=0;
+          if($fechaInicio<=$fechaDesde && $fechaDesde<=$fechaLimite){
+              $diferencia=$fechaDesde->diffInDays($fechaLimite->addDay());
+          }
+          if($fechaInicio<=$fechaHasta && $fechaHasta<=$fechaLimite){
+              $diferencia=$fechaInicio->diffInDays($fechaHasta->addDay());
+          }
+          if($fechaDesde<=$fechaInicio && $fechaLimite<=$fechaHasta){
+              $diferencia=$fechaInicio->diffInDays($fechaLimite);
+          }
+          $dias+=$diferencia;
+        }
+      }
+
+      $start_date = $fecha_desde;
+      $finish_date = $fecha_hasta;
+      $tam=intval($dias);
+      $fecha = DateTime::createFromFormat('Y-m-d',$start_date);
+      $fecha2 = DateTime::createFromFormat('Y-m-d',$finish_date);
+
+
+      $cantidad=DB::select("select count(DISTINCT a.abierto) as 'cantidad' from fechas a where a.abierto>='".date_format($fecha,'Y-m-d')."' and '".date_format($fecha2,'Y-m-d')."'>=a.abierto and a.Hotel_id=".$hotel->id);
+
+      return $dias==$cantidad[0]->cantidad || $perteneceUna;
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\DB;
 use App\Hotel;
 use App\Alojamiento;
+use Illuminate\Support\Collection;
 
 class HotelAlojamientoController extends ApiController
 {
@@ -173,5 +174,22 @@ class HotelAlojamientoController extends ApiController
             }
          }
          return response()->json(['data'=>'tabla precios actualizada'],200);
+    }
+
+
+    public function descriptivo($hotel_id){
+       $hotel=Hotel::findOrFail($hotel_id);
+       $alojamientos=DB::select("select a.id 'identificador', precio 'precio', p2.tipo 'pension',
+          th.tipo 'tipoHabitacion', t.tipo 'temporada', t.fecha_desde, t.fecha_hasta
+          from alojamientos a, pensions p2 ,tipo_habitacions th ,temporadas t
+          where  p2.Hotel_id=th.Hotel_id  and p2.Hotel_id =t.Hotel_id
+          and a.Pension_id =p2.id
+          and a.tipo_habitacion_id =th.id and t.id =a.Temporada_id
+          and p2.Hotel_id =".$hotel->id );
+       $collection = new Collection();
+       foreach($alojamientos as $alojamiento){
+          $collection->push($alojamiento);
+       }
+       return $this->showAll2($collection);
     }
 }

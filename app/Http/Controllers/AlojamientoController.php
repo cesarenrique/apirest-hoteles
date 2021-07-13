@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Alojamiento;
+use Illuminate\Support\Facades\DB;
+use App\Hotel;
+use Illuminate\Support\Collection;
 
 class AlojamientoController extends ApiController
 {
@@ -267,4 +270,21 @@ class AlojamientoController extends ApiController
       $alojamiento->delete();
       return $this->showOne($alojamiento);
     }
+    public function descriptivo($alojamiento_id){
+
+       $alojamiento=Alojamiento::findOrFail($alojamiento_id);
+       $alojamientos=DB::select("select a.id 'identificador', precio 'precio', p2.tipo 'pension',
+          th.tipo 'tipoHabitacion', t.tipo 'temporada', t.fecha_desde, t.fecha_hasta
+          from alojamientos a, pensions p2 ,tipo_habitacions th ,temporadas t
+          where  p2.Hotel_id=th.Hotel_id  and p2.Hotel_id =t.Hotel_id
+          and a.Pension_id =p2.id
+          and a.tipo_habitacion_id =th.id and t.id =a.Temporada_id
+          and a.id =".$alojamiento->id );
+       $collection = new Collection();
+       foreach($alojamientos as $alojamiento){
+          $collection->push($alojamiento);
+       }
+       return $this->showOne2($collection->first());
+     }
+
 }

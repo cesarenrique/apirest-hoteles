@@ -47,6 +47,7 @@ class LocalidadTransformer extends TransformerAbstract
                   'rel'=>'pais.hotels',
                   'href'=> route('localidads.hotels.index',$localidad->id),
               ],
+
             ],
         ];
     }

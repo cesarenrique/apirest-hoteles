@@ -33,8 +33,8 @@ class ClienteTransformer extends TransformerAbstract
     public function transform(Cliente $cliente)
     {
         return [
-          'id' => (int)$cliente->id,
-          'NIF'=>(string)$cliente->NIF,
+          'identificador' => (int)$cliente->id,
+          'nif'=>(string)$cliente->NIF,
           'nombre'=>(string)$cliente->nombre,
           'correo'=>(string)$cliente->email,
           'telefono'=>(string)$cliente->telefono,

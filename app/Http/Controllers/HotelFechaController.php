@@ -162,7 +162,7 @@ class HotelFechaController extends ApiController
         $fecha = DateTime::createFromFormat('Y-m-d',$start_date);
         for($i=0;$i<$tam;$i++){
 
-          $cantidad=DB::select("select count(*) as 'cantidad' from fechas a where a.abierto=".date_format($fecha,'Y-m-d')." and a.Hotel_id=".$hotel->id);
+          $cantidad=DB::select("select count(*) as 'cantidad' from fechas a where a.abierto='".date_format($fecha,'Y-m-d')."' and a.Hotel_id=".$hotel->id);
 
           if($cantidad[0]->cantidad==0){
               DB::statement(' Insert into fechas (abierto,Hotel_id) values ("'.date_format($fecha,'Y-m-d').'",'.$hotel->id.')');

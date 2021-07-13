@@ -26,13 +26,22 @@ trait ApiResponse{
     }
     $transformer = $collection->first()->transformer;
     $collection = $this->transformData($collection,$transformer);
-    return $this->successResponse([$collection], $code); //ya añade data
+    return $this->successResponse($collection, $code); //ya añade data
   }
-
+  protected function showAll2(Collection $collection, $code=200){
+    if($collection->isEmpty()){
+      return $this->successResponse(['data'=>$collection],$code);
+    }
+    return $this->successResponse(['data'=>$collection], $code); //ya añade data
+  }
   protected function showOne(Model $instance,$code=200){
     $transformer = $instance->transformer;
     $instance = $this->transformData($instance,$transformer);
-    return $this->successResponse([$instance], $code); //ya añade data
+    return $this->successResponse($instance, $code); //ya añade data
+  }
+
+  protected function showOne2($instance,$code=200){
+    return $this->successResponse(['data'=>$instance], $code); //ya añade data
   }
 
   protected function transformData( $data, $transformer){
