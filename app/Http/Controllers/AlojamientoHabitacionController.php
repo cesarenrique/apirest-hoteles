@@ -131,19 +131,19 @@ class AlojamientoHabitacionController extends ApiController
            return $this->errorResponse("fecha_desde no puede ser mayor fecha_hasta",404);
         }
 
-        $dias=$fechadesde->diffInDays($fechaHasta);
+        $dias=$fechaDesde->diffInDays($fechaHasta);
         $alojamiento=Alojamiento::findOrFail($alojamiento_id);
         $tipo=TipoHabitacion::findOrFail($alojamiento->tipo_habitacion_id);
         $habitaciones=$tipo->habitacions;
         $collection=new Collection();
         foreach($habitaciones as $habitacion){
-          $cantidad=DB::select("select count(f.id) 'cantidad' from fechas f  habitacions h
+          $cantidad=DB::select("select count(f.id) 'cantidad' from fechas f,  habitacions h
            where f.Hotel_id=h.Hotel_id
-           and f.Hotel_id =".$habitacion->Hotel_id." and '".$fechadesde."'<=f.abierto
+           and f.Hotel_id =".$habitacion->Hotel_id." and '".$fechaDesde."'<=f.abierto
            and f.abierto<= '".$fechaHasta."' and h.id =".$habitacion->id);
-           $cantidad2=select("select count(f.id) 'cantidad' from fechas f , habitacions h,reservas r
+           $cantidad2=DB::select("select count(f.id) 'cantidad' from fechas f , habitacions h,reservas r
            where f.Hotel_id=h.Hotel_id
-           and f.Hotel_id =".$habitacion->Hotel_id." and '".$fechadesde."'<=f.abierto and r.Habitacion_id =h.id
+           and f.Hotel_id =".$habitacion->Hotel_id." and '".$fechaDesde."'<=f.abierto and r.Habitacion_id =h.id
            and f.id=r.Fecha_id
            and f.abierto<= '".$fechaHasta."' and h.id =".$habitacion->id);
           if($dias==($cantidad[0]->cantidad-$cantidad2[0]->cantidad)){

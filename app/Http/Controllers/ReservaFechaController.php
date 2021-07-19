@@ -10,6 +10,7 @@ use App\Alojamiento;
 use App\Habitacion;
 use App\Pension;
 use App\Temporada;
+use App\Hotel;
 use App\Http\Controllers\TemporadaController;
 use Illuminate\Support\Collection;
 
@@ -54,14 +55,19 @@ class ReservaFechaController extends ApiController
       $this->validate($request,$rules);
 
       $habitacion=Habitacion::findOrFail($request->Habitacion_id);
+      $hotel=Hotel::findOrFail($habitacion->Hotel_id);
       if($this->puedeReservarseValidar($habitacion->Hotel_id,$request->fecha_desde,$request->fecha_hasta)){
+
           $fechas=Fecha::whereBetween('abierto',[$request->fecha_desde,$request->fecha_hasta])->where('Hotel_id',$habitacion->Hotel_id)->get();
           $collection=new Collection();
 
           foreach ($fechas as $fecha) {
+            if(!($fecha->Hotel_id==$habitacion->Hotel_id && $fecha->Hotel_id==$pension->Hotel_id)){
+              return $this->errorResponse('Fecha_id, Habitacion_id, Alojamiento_id deben ser del mismo hotel',405);
+            }
             $campos=array();
             $campos['reservado']=Reserva::PRERESERVADO;
-            $campos['estado']=RESERVA::PENDIENTE_PAGO;
+            $campos['estado']=Reserva::PENDIENTE_PAGO;
             $campos['Habitacion_id']=$habitacion->id;
             $campos['Cliente_id']=$request->Cliente_id;
             $campos['pagado']='0';

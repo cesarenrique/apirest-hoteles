@@ -196,7 +196,7 @@ class AlojamientoController extends ApiController
      **/
     public function update(Request $request, $id)
     {
-      $alojamiento=Hotel::findOrFail($id);
+      $alojamiento=Alojamiento::findOrFail($id);
       $rules=[
         'precio'=> 'required',
       ];

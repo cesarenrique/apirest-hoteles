@@ -10,6 +10,7 @@ use App\Fecha;
 use App\Alojamiento;
 use App\Habitacion;
 use App\Pension;
+use App\Hotel;
 
 class ReservaController extends ApiController
 {
@@ -131,12 +132,13 @@ class ReservaController extends ApiController
       $this->validate($request,$rules);
       $campos=$request->all();
       $campos['reservado']=Reserva::RESERVADO;
-      $campos['estado']=RESERVA::PAGADO_TOTALMENTE;
+      $campos['estado']=Reserva::PAGADO_TOTALMENTE;
 
       $fecha=Fecha::findOrFail($request->Fecha_id);
       $habitacion=Habitacion::findOrFail($request->Habitacion_id);
       $alojamiento=Alojamiento::findOrFail($request->Alojamiento_id);
       $pension=Pension::findOrFail($alojamiento->Pension_id);
+      $hotel=Hotel::findOrFail($pension->Hotel_id);
       if(!($fecha->Hotel_id==$habitacion->Hotel_id && $fecha->Hotel_id==$pension->Hotel_id)){
         return $this->errorResponse('Fecha_id, Habitacion_id, Alojamiento_id deben ser del mismo hotel',405);
       }
