@@ -21,9 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('verified')->default(User::USUARIO_NO_VERIFICADO);
-            $table->string('verification_token')->nullable();
+            $table->string('verify_Token')->nullable();
             $table->string('tipo_usuario')->default(User::USUARIO_CLIENTE);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

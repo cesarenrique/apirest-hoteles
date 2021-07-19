@@ -6,10 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\UserTransformer;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens, SoftDeletes;
 
 
     const USUARIO_VERIFICADO='1';
@@ -20,13 +23,16 @@ class User extends Authenticatable
     const USUARIO_EDITOR='2';
     const USUARIO_CLIENTE='3';
 
+    public $transformer= UserTransformer::class;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+    protected $dates=['deleted_at'];
     protected $fillable = [
-        'name', 'email', 'password', 'verified', 'verification_token', 'tipo_usuario',
+        'name', 'email', 'password', 'verified', 'tipo_usuario',
     ];
 
     /**
@@ -35,7 +41,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','verification_token',
+        'password', 'remember_token', 'verify_Token',
     ];
 
     /**
